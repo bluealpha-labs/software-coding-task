@@ -1,0 +1,201 @@
+copy of bluealpha website 
+Make every ad dollar work harder
+Put a team of marketing scientists inside your ad stack - spotting wasted dollars, showing where to reinvest, and automating the busy-work so your team can focus on growth.
+
+Trusted by marketing teams at
+
+Do more with less
+Messy first-party data, walled-garden signals and black box metrics prevent your team from achieving consistent defendable incremental revenue.
+
+Customers cost more
+Auction competition, privacy rules, and saturated audiences push acquisition costs up double digits year-over-year. Channels that once scaled cheaply now barely break even unless strategy - and measurement - evolve.
+
+Platforms grade their own homework
+Ad platforms mark their own exams, inflating success with murky attribution windows and view-through alchemy that can pad conversions by 15%. Without a second opinion, budgets chase mirages while true acquisition costs swell. Independent measurement strips away the smoke so every dollar backs real growth.
+
+Too many tools, not enough signal
+Marketers burn nearly a third of their week copy-pasting CSVs, stitching charts, and begging tools to speak the same language. Those lost hours disappear into spreadsheet acrobatics that still fail to show the full picture.
+
+Higher targets, less cash
+Economic headwinds and rising media prices squeeze spend. Teams must justify every dollar, re-plan weekly, and still hit stretch KPIs - turning “do more with less” from slogan into daily reality.
+
+Our results...
+14x
+revenue for every $1 newly routed through BlueAlpha
+
+21%
+reduction in Cost per Acquisition, while growing top-line revenue
+
+5x
+productivity, more campaigns and channels with the same headcount
+
+Take back control from black-box metrics
+Break free of opaque reporting, trim CAC, and unlock revenue with auditable, real-time insight.
+
+
+
+Email chain with CTO
+
+Chinmay Khamkar <khamkarchinmay4@gmail.com>
+✓
+Wed 17 Sept, 15:13 (1 day ago)
+to Stefan
+
+Hey Stefan,
+I went through the basic layout and have a few questions and thoughts
+The bottom line question I have is should I be considering building this from a scalability perspective or just mvp level stuff is enough for now and call out how this can be scaled in readme or something like that?
+
+If it's the prior then there are stuff like rate limiting for APIs mainly the auth endpoints, caching, database indexing considerations maybe. 
+
+Another question I have is for the dashboard view, should I be considering multiple types of users (eg admin, normal user) and the view of the dashboard might change based on that? If this is the case then I should be considering role based access control. 
+Also, any specific features you'd want to implement in the dashboard view or do I have the creative freedom? I'm also thinking of providing a user profile management section to update user details, lmk your thoughts on this as well.
+
+A few thoughts on my end and calling it out loud
+- I'll be versioning the apis ( /v1/ )
+- For auth, I'm thinking of going with JWT with access + refresh tokens. 
+- The database schema design would depend on the questions asked above (basic or a bit more complex)
+- I'll probably use React Context for auth state management
+
+A few final questions
+- Do you want me to cover any unit tests for this?
+- Once I'm done with my implementation and push the changes, I'm assuming you would do the same steps which we did today (during the setup) to run the project on your end right? 
+
+For now I have these questions and thoughts but I'll keep you in loop throughout. I'm planning to start working on this tomorrow, maybe from 4pm.
+
+Best,
+Chinmay
+
+Stefan Schlegl
+Wed 17 Sept, 15:30 (1 day ago)
+to me
+
+Focus is MVP. 
+Get something up and running so we can look at it and validate.
+Overall, keep things basic:
+- RBAC not needed in the moment (if possible - keep things extensible for the future). We will keep the dashboard the same for now.
+- scalability - put down thoughts and considerations in some notes. We will discuss your implementation in the end. You can reference it then.
+- concerning the dashboard you have creative freedom when it comes to visualizations. The results should come from one of our model traces.
+- user profile settings is not P1. Its a nice to have that Id leave until the end.
+- concerning auth - sounds good.
+- No need for unit tests. However, do put down notes and considerations around deployment.
+- yes - this should run perfectly fine on my machine as well
+
+Cheers
+Stefan
+
+
+
+Chinmay Khamkar <khamkarchinmay4@gmail.com>
+✓
+Wed 17 Sept, 15:31 (1 day ago)
+to Stefan
+
+Awesome, thanks for the info! I'll email you if I have any questions.
+
+Chinmay Khamkar <khamkarchinmay4@gmail.com>
+15:37 (6 hours ago)
+to Stefan
+
+Hey Stefan,
+Just wanna give you an update. I'm having a few calls and work commitments today so I'll be starting with the assignment later today post dinner and will continue tomorrow. I think you have answered most of my questions already so I'm good on that regard. I have the exact scope of what I want to build.
+I'll email you when I'm done.
+Have a safe trip!!
+
+Best,
+Chinmay
+
+Stefan Schlegl
+15:39 (6 hours ago)
+to me
+
+Thanks. Just make sure you have a clear idea of what needs to happen for both with and dashboard. Give me a heads up if you need input
+
+Good luck
+
+Chinmay Khamkar <khamkarchinmay4@gmail.com>
+15:43 (6 hours ago)
+to Stefan
+
+For sure. Btw was there a typo? 
+Didn't quite catch 'for both with and dashboard"
+
+Stefan Schlegl
+15:46 (6 hours ago)
+to me
+
+auth and dashboard
+Autocorrect - sorry
+
+Chinmay Khamkar <khamkarchinmay4@gmail.com>
+15:48 (6 hours ago)
+to Stefan
+
+Ah makes sense. Sounds good. 
+Protected routes is what I have in mind. Without login/signup, user shouldn't be able to access certain pages (dashboard) 
+
+Stefan Schlegl
+15:51 (6 hours ago)
+to me
+
+Got it.
+Are you clear on what you need to show on the dashboard?
+
+Chinmay Khamkar <khamkarchinmay4@gmail.com>
+15:54 (6 hours ago)
+to Stefan
+
+I haven't decided on the exact components yet but I'm thinking standard stuff which is usually expected for a dashboard view and also since BlueAlpha is in the ads business, something themed along that use case for eg- the campaign analytics, spend over time, ads performance etc.
+Do you have anything specific in mind that I should cover?
+
+Stefan Schlegl
+16:02 (6 hours ago)
+to me
+
+That sounds good.
+But yes - in fact I do have a few specific requirements ;)
+I’ll send you a google drive invite in the hour 
+There will be some details.
+Everything else is up to you
+
+Chinmay Khamkar <khamkarchinmay4@gmail.com>
+16:03 (6 hours ago)
+to Stefan
+
+Sounds good! 
+
+Stefan Schlegl
+16:46 (5 hours ago)
+to me
+
+I gave you access to the drive.
+Good luck
+
+Chinmay Khamkar <khamkarchinmay4@gmail.com>
+✓
+17:21 (4 hours ago)
+to Stefan
+
+Got the access and I understand what you mean now!! 
+Thanks for the heads up
+
+Google drive content 
+
+This folder contains a model trace sample_mmm.pkl
+PLEASE COPY THE FILE AND DO NOT REMOVE IT
+
+This model trace is a google meridian model trace.
+The developer documentation is here:
+https://developers.google.com/meridian/reference/api/meridian
+
+It contains all required data and transformation functions.
+
+Concerning the plots, you must create the following two charts:
+A contribution chart (pick one)
+The response curves
+
+(ref: https://developers.google.com/meridian/docs/advanced-modeling/interpret-visualizations)
+
+The general structure of the dashboard and other visualizations are up to you.
+The goal is to create a compelling narrative for a customer, that shows the performance of their channels.
+
+pkl file added in the root directory.
