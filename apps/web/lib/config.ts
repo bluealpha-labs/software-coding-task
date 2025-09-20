@@ -9,4 +9,13 @@ export const API_ENDPOINTS = {
     REFRESH: "/auth/refresh",
     ME: "/auth/me",
   },
+  DASHBOARD: {
+    SUMMARY: "/dashboard/summary",
+    CONTRIBUTION: "/dashboard/contribution",
+    RESPONSE_CURVES: "/dashboard/response-curves",
+    RESPONSE_CURVE_BY_CHANNEL: "/dashboard/response-curves",
+    TIME_SERIES: "/dashboard/time-series",
+    METRICS: "/dashboard/metrics",
+    CHANNELS: "/dashboard/channels",
+  },
 } as const

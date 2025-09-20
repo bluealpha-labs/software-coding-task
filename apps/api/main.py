@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from typing import List, Optional
 
 from api.config import get_settings
 from api.database import get_db, engine
@@ -11,9 +12,17 @@ from api.auth import (
 )
 from api.user_service import UserService
 from api.models import Base
+from api.mmm_service import (
+    MMModelService, ContributionData, ResponseCurveData,
+    ChannelTimeSeries, ChannelMetrics, MMModelSummary,
+    GeoPerformance, GeoComparison, ReachFrequencyAnalysis, GeoReachFrequency
+)
 
 settings = get_settings()
 app = FastAPI(title="BlueAlpha API", version="1.0.0")
+
+# Initialize MMM service
+mmm_service = MMModelService()
 
 
 @app.on_event("startup")
@@ -138,6 +147,158 @@ async def refresh_token(
 async def get_current_user_info(current_user: UserResponse = Depends(get_current_user)):
     """Get current user information."""
     return current_user
+
+
+# MMM Dashboard endpoints (protected)
+@app.get("/api/v1/dashboard/summary", response_model=MMModelSummary)
+async def get_dashboard_summary(current_user: UserResponse = Depends(get_current_user)):
+    """Get MMM model summary for dashboard overview."""
+    try:
+        return mmm_service.get_model_summary()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get model summary: {str(e)}"
+        )
+
+
+@app.get("/api/v1/dashboard/contribution", response_model=List[ContributionData])
+async def get_contribution_data(current_user: UserResponse = Depends(get_current_user)):
+    """Get channel contribution data for contribution charts."""
+    try:
+        return mmm_service.get_contribution_data()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get contribution data: {str(e)}"
+        )
+
+
+@app.get("/api/v1/dashboard/response-curves", response_model=List[ResponseCurveData])
+async def get_response_curves(current_user: UserResponse = Depends(get_current_user)):
+    """Get response curve data for all channels."""
+    try:
+        return mmm_service.get_response_curves()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get response curves: {str(e)}"
+        )
+
+
+@app.get("/api/v1/dashboard/response-curves/{channel}", response_model=ResponseCurveData)
+async def get_response_curve_by_channel(
+    channel: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Get response curve data for a specific channel."""
+    try:
+        curve_data = mmm_service.get_response_curve_for_channel(channel)
+        if curve_data is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Channel '{channel}' not found"
+            )
+        return curve_data
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get response curve for channel: {str(e)}"
+        )
+
+
+@app.get("/api/v1/dashboard/time-series", response_model=List[ChannelTimeSeries])
+async def get_time_series_data(
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Get time series spend data for all channels with optional date filtering."""
+    try:
+        return mmm_service.get_time_series_data(start_date=start_date, end_date=end_date)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get time series data: {str(e)}"
+        )
+
+
+@app.get("/api/v1/dashboard/metrics", response_model=List[ChannelMetrics])
+async def get_channel_metrics(current_user: UserResponse = Depends(get_current_user)):
+    """Get comprehensive channel performance metrics."""
+    try:
+        return mmm_service.get_channel_metrics()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get channel metrics: {str(e)}"
+        )
+
+
+@app.get("/api/v1/dashboard/channels", response_model=List[str])
+async def get_channels(current_user: UserResponse = Depends(get_current_user)):
+    """Get list of all marketing channels."""
+    try:
+        return mmm_service.get_channels()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get channels: {str(e)}"
+        )
+
+
+# Geographic Analysis Endpoints
+
+@app.get("/api/v1/dashboard/geo/performance", response_model=List[GeoPerformance])
+async def get_geo_performance(current_user: UserResponse = Depends(get_current_user)):
+    """Get performance data for all geographies."""
+    try:
+        return mmm_service.get_geo_performance()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get geo performance: {str(e)}"
+        )
+
+
+@app.get("/api/v1/dashboard/geo/comparison", response_model=GeoComparison)
+async def get_geo_comparison(current_user: UserResponse = Depends(get_current_user)):
+    """Get geographic comparison with top/bottom performers and insights."""
+    try:
+        return mmm_service.get_geo_comparison()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get geo comparison: {str(e)}"
+        )
+
+
+# Reach/Frequency Analysis Endpoints
+
+@app.get("/api/v1/dashboard/reach-frequency/analysis", response_model=ReachFrequencyAnalysis)
+async def get_reach_frequency_analysis(current_user: UserResponse = Depends(get_current_user)):
+    """Get reach/frequency analysis for Channel3."""
+    try:
+        return mmm_service.get_reach_frequency_analysis()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get reach/frequency analysis: {str(e)}"
+        )
+
+
+@app.get("/api/v1/dashboard/reach-frequency/geo", response_model=List[GeoReachFrequency])
+async def get_geo_reach_frequency(current_user: UserResponse = Depends(get_current_user)):
+    """Get reach/frequency performance by geography."""
+    try:
+        return mmm_service.get_geo_reach_frequency()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get geo reach/frequency: {str(e)}"
+        )
 
 
 # Root endpoint
