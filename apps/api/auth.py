@@ -10,9 +10,9 @@ from pydantic import BaseModel, field_validator
 
 
 # Configuration
-SECRET_KEY = "bluealpha-interview-secret-key-change-in-production"  # TODO: Move to env vars
+SECRET_KEY = "bluealpha-interview-secret-key-change-in-production"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 300
 REFRESH_TOKEN_EXPIRE_DAYS = 7
 
 # Password hashing

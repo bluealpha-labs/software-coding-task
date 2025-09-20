@@ -51,7 +51,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
             />
             <span className="text-muted-foreground">{entry.dataKey}:</span>
             <span className="font-medium">
-              {Number(entry.value).toLocaleString()} incremental conversions
+              ${Number(entry.value).toLocaleString()} incremental revenue
             </span>
           </div>
         ))}
@@ -96,26 +96,43 @@ export function ResponseCurvesChart() {
     )
   }
 
-  // Transform data for the chart - All channels now use same spend range
+  // Transform data for the chart - Create separate datasets for solid and dashed portions
   const chartData: any[] = []
+  const dashedChartData: any[] = []
 
   // Since all channels now have same spend points, we can use any channel's curve_points for spend values
   if (data.length > 0) {
     const numPoints = data[0].curve_points.length
 
     for (let i = 0; i < numPoints; i++) {
-      const point: any = {
-        spend: data[0].curve_points[i].spend  // All channels have same spend values now
-      }
+      const spend = data[0].curve_points[i].spend
+      const point: any = { spend }
+      const dashedPoint: any = { spend }
 
       // Add each channel's incremental conversions for this spend level
       data.forEach(channel => {
         if (channel.curve_points[i]) {
-          point[channel.channel] = channel.curve_points[i].incremental_conversions
+          const value = channel.curve_points[i].incremental_conversions
+          const currentSpend = channel.current_spend
+
+          // For solid lines - show data up to current spend
+          if (spend <= currentSpend) {
+            point[channel.channel] = value
+          } else {
+            point[channel.channel] = null
+          }
+
+          // For dashed lines - show data from current spend onwards
+          if (spend >= currentSpend) {
+            dashedPoint[channel.channel] = value
+          } else {
+            dashedPoint[channel.channel] = null
+          }
         }
       })
 
       chartData.push(point)
+      dashedChartData.push(dashedPoint)
     }
   }
 
@@ -145,9 +162,9 @@ export function ResponseCurvesChart() {
     <Card>
       <CardHeader>
         <CardTitle className="flex flex-col space-y-1">
-          <span>Response curves by marketing channel (top 5)</span>
+          <span>Response curves by marketing channel (dummy data)</span>
           <span className="text-sm font-normal text-muted-foreground">
-            Incremental conversions
+            Incremental revenue
           </span>
         </CardTitle>
       </CardHeader>
@@ -185,19 +202,21 @@ export function ResponseCurvesChart() {
                   tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
                   className="text-xs"
                   tick={{ fill: 'currentColor', fontSize: 12 }}
+                  domain={[0, 100000]}
+                  type="number"
                   label={{
-                    value: 'Spend ($)',
+                    value: 'Spend',
                     position: 'insideBottom',
                     offset: -10,
                     style: { textAnchor: 'middle', fill: 'currentColor', fontSize: '12px' }
                   }}
                 />
                 <YAxis
-                  tickFormatter={(value) => `${(value / 1000000).toFixed(1)}M`}
+                  tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
                   className="text-xs"
                   tick={{ fill: 'currentColor', fontSize: 12 }}
                   label={{
-                    value: 'Incremental Conversions',
+                    value: 'Incremental Revenue',
                     angle: -90,
                     position: 'insideLeft',
                     style: { textAnchor: 'middle', fill: 'currentColor', fontSize: '12px' }
@@ -207,19 +226,22 @@ export function ResponseCurvesChart() {
                 <Legend
                   wrapperStyle={{
                     fontSize: '12px',
-                    color: 'currentColor'
+                    color: 'currentColor',
+                    paddingTop: '20px'
                   }}
                 />
                 
+                {/* Solid lines up to current spend */}
                 {data.map((channel, index) => (
                   visibleChannels.includes(channel.channel) && (
                     <Line
-                      key={channel.channel}
+                      key={`solid-${channel.channel}`}
                       type="monotone"
                       dataKey={channel.channel}
                       stroke={colors.chartColors[index % colors.chartColors.length]}
                       strokeWidth={3}
-                      dot={false}  // Remove all dots from the line
+                      dot={false}
+                      connectNulls={false}
                       activeDot={{
                         r: 6,
                         strokeWidth: 2,
@@ -229,6 +251,33 @@ export function ResponseCurvesChart() {
                       }}
                       animationDuration={1000}
                       animationBegin={index * 100}
+                    />
+                  )
+                ))}
+
+                {/* Dashed lines from current spend onwards */}
+                {data.map((channel, index) => (
+                  visibleChannels.includes(channel.channel) && (
+                    <Line
+                      key={`dashed-${channel.channel}`}
+                      type="monotone"
+                      dataKey={channel.channel}
+                      data={dashedChartData}
+                      stroke={colors.chartColors[index % colors.chartColors.length]}
+                      strokeWidth={3}
+                      strokeDasharray="8 4"
+                      dot={false}
+                      connectNulls={false}
+                      legendType="none"
+                      activeDot={{
+                        r: 6,
+                        strokeWidth: 2,
+                        fill: colors.chartColors[index % colors.chartColors.length],
+                        stroke: '#fff',
+                        style: { filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.2))' }
+                      }}
+                      animationDuration={1000}
+                      animationBegin={index * 100 + 200}
                     />
                   )
                 ))}

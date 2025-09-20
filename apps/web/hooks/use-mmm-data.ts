@@ -14,15 +14,15 @@ export interface ContributionData {
 
 export interface ResponseCurvePoint {
   spend: number
-  incremental_conversions: number  // FIXED: Updated to match backend
+  incremental_conversions: number
   efficiency: number
 }
 
 export interface ResponseCurveData {
   channel: string
   curve_points: ResponseCurvePoint[]
-  current_spend: number  // NEW: Current spend position
-  max_efficient_spend: number  // NEW: Saturation point
+  current_spend: number
+  max_efficient_spend: number
 }
 
 export interface TimeSeriesPoint {
