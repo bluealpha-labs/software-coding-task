@@ -1,12 +1,22 @@
-import { Button } from "@workspace/ui/components/button"
+"use client";
+
+import { useAuth } from "../lib/auth";
+import { AuthPage } from "../components/auth/auth-page";
+import { Dashboard } from "../components/dashboard/dashboard";
 
 export default function Page() {
-  return (
-    <div className="flex items-center justify-center min-h-svh">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">Hello World</h1>
-        <Button size="sm">Button</Button>
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+          <p className="mt-4 text-lg">Loading...</p>
+        </div>
       </div>
-    </div>
-  )
+    );
+  }
+
+  return user ? <Dashboard /> : <AuthPage />;
 }
