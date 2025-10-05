@@ -63,6 +63,19 @@ export function LoginForm() {
         <CardDescription>
           Enter your credentials to access the dashboard
         </CardDescription>
+        <div className="text-sm text-muted-foreground bg-blue-50 p-3 rounded-md">
+          <p className="font-medium mb-1">Demo Credentials:</p>
+          <p>
+            Admin:{" "}
+            <code className="bg-gray-100 px-1 rounded">admin@example.com</code>{" "}
+            / <code className="bg-gray-100 px-1 rounded">Admin123!</code>
+          </p>
+          <p>
+            Test:{" "}
+            <code className="bg-gray-100 px-1 rounded">test@example.com</code> /{" "}
+            <code className="bg-gray-100 px-1 rounded">Test123!</code>
+          </p>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -27,16 +27,31 @@ export const validatePassword = (password: string): ValidationResult => {
 
   if (!password) {
     errors.push("Password is required");
-  } else if (password.length < 8) {
-    errors.push("Password must be at least 8 characters long");
-  } else if (password.length > 128) {
-    errors.push("Password must be less than 128 characters");
-  } else if (!/(?=.*[a-z])/.test(password)) {
-    errors.push("Password must contain at least one lowercase letter");
-  } else if (!/(?=.*[A-Z])/.test(password)) {
-    errors.push("Password must contain at least one uppercase letter");
-  } else if (!/(?=.*\d)/.test(password)) {
-    errors.push("Password must contain at least one number");
+  } else {
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters long");
+    } else if (password.length > 128) {
+      errors.push("Password must be less than 128 characters");
+    }
+
+    if (password.length >= 8) {
+      const missingRequirements = [];
+      if (!/(?=.*[a-z])/.test(password)) {
+        missingRequirements.push("lowercase letter");
+      }
+      if (!/(?=.*[A-Z])/.test(password)) {
+        missingRequirements.push("uppercase letter");
+      }
+      if (!/(?=.*\d)/.test(password)) {
+        missingRequirements.push("number");
+      }
+
+      if (missingRequirements.length > 0) {
+        errors.push(
+          `Password must contain at least one ${missingRequirements.join(", ")}`
+        );
+      }
+    }
   }
 
   return {

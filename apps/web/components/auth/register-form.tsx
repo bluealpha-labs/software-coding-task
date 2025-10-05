@@ -84,6 +84,10 @@ export function RegisterForm() {
               required
               placeholder="Enter your password"
             />
+            <div className="text-xs text-muted-foreground">
+              Password must be at least 8 characters with uppercase, lowercase,
+              and number
+            </div>
           </div>
           {validationErrors.length > 0 && (
             <div className="text-red-500 text-sm">

@@ -8,6 +8,7 @@ from api.config import get_settings
 from api.routers import auth, dashboard
 from api.logging_config import setup_logging, get_logger
 from api.constants import API_TITLE, API_VERSION, ALLOWED_ORIGINS
+from api.services.migration_service import migration_service
 import logging
 
 # Setup logging
@@ -61,3 +62,43 @@ async def health():
 @app.get("/")
 async def root():
     return {"message": API_TITLE, "version": API_VERSION}
+
+# Startup event - run migrations
+@app.on_event("startup")
+async def startup_event():
+    """Run database migrations on startup."""
+    logger.info("Starting up MMM Dashboard API...")
+    
+    try:
+        logger.info("Running database migrations...")
+        migration_results = migration_service.run_migrations()
+        
+        if migration_results["applied"]:
+            logger.info(f"Applied migrations: {migration_results['applied']}")
+        
+        if migration_results["skipped"]:
+            logger.info(f"Skipped migrations: {migration_results['skipped']}")
+        
+        if migration_results["errors"]:
+            logger.error(f"Migration errors: {migration_results['errors']}")
+        else:
+            logger.info("All migrations completed successfully")
+            
+    except Exception as e:
+        logger.error(f"Failed to run migrations: {e}")
+        # Don't fail startup for migration errors in development
+        # In production, you might want to fail fast
+
+# Shutdown event - cleanup resources
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup resources on shutdown."""
+    logger.info("Shutting down MMM Dashboard API...")
+    
+    try:
+        # Close database connection pool
+        from api.services.database_service import db_service
+        db_service.close_pool()
+        logger.info("Database connection pool closed")
+    except Exception as e:
+        logger.error(f"Error during shutdown: {e}")

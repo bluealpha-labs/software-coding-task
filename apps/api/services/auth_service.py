@@ -6,14 +6,11 @@ from fastapi import HTTPException, status
 from api.models.user import User, UserInDB, UserCreate, TokenData
 from api.services.database_service import db_service
 from api.constants import SECRET_KEY_MIN_LENGTH, ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM
-import os
+from api.config import get_settings
 
 # Security
-SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable is required")
-if len(SECRET_KEY) < SECRET_KEY_MIN_LENGTH:
-    raise ValueError(f"SECRET_KEY must be at least {SECRET_KEY_MIN_LENGTH} characters long")
+settings = get_settings()
+SECRET_KEY = settings.SECRET_KEY
 
 # Use bcrypt as originally intended
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -55,13 +52,25 @@ def create_user(user: UserCreate) -> User:
             detail="Email already registered"
         )
     
-    hashed_password = get_password_hash(user.password)
-    user_data = db_service.create_user(user.email, user.full_name, hashed_password)
-    
-    if not user_data:
+    try:
+        hashed_password = get_password_hash(user.password)
+        user_data = db_service.create_user(user.email, user.full_name, hashed_password)
+        
+        if not user_data:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create user"
+            )
+        
+        return User(**{k: v for k, v in user_data.items() if k != "hashed_password"})
+    except HTTPException:
+        raise
+    except Exception as e:
+        # Log the error for debugging
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Unexpected error creating user {user.email}: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to create user"
         )
-    
-    return User(**{k: v for k, v in user_data.items() if k != "hashed_password"})

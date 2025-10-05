@@ -12,24 +12,30 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create admin user (password: 'admin123')
--- Note: This is a bcrypt hash for 'admin123'
+-- Create admin user (password: 'Admin123!')
+-- Note: This is a bcrypt hash for 'Admin123!'
 INSERT INTO users (email, full_name, hashed_password, is_active) 
 VALUES (
     'admin@example.com',
     'Admin User',
-    '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J/HSbK8m2',
+    '$2b$12$xfdbdNHdGJmZqCQNlLb3O.Qt8XYiA4e7NjiTxBEgSAWi3ouVCEhfu',
     TRUE
-) ON CONFLICT (email) DO NOTHING;
+) ON CONFLICT (email) DO UPDATE SET 
+    hashed_password = EXCLUDED.hashed_password,
+    full_name = EXCLUDED.full_name,
+    is_active = EXCLUDED.is_active;
 
--- Create test user (password: 'test123')
+-- Create test user (password: 'Test123!')
 INSERT INTO users (email, full_name, hashed_password, is_active) 
 VALUES (
     'test@example.com',
     'Test User',
-    '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J/HSbK8m2',
+    '$2b$12$0qYwSxzhcwZYgEi86Z.iY.RL2fqPFGBzlIVt6rl0QwwegKdt7WTM2',
     TRUE
-) ON CONFLICT (email) DO NOTHING;
+) ON CONFLICT (email) DO UPDATE SET 
+    hashed_password = EXCLUDED.hashed_password,
+    full_name = EXCLUDED.full_name,
+    is_active = EXCLUDED.is_active;
 
 -- Create index on email for faster lookups
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);

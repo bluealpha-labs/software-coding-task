@@ -2,24 +2,25 @@ import psycopg2
 from psycopg2 import pool
 from psycopg2.extras import RealDictCursor
 from typing import Optional, Dict, Any
-import os
 import logging
+from api.config import get_settings
+from api.constants import DB_POOL_MIN_CONNECTIONS, DB_POOL_MAX_CONNECTIONS
 
 logger = logging.getLogger(__name__)
 
 class DatabaseService:
     def __init__(self):
+        settings = get_settings()
         self.conn_params = {
-            'host': os.getenv('POSTGRES_HOST', 'localhost'),
-            'port': int(os.getenv('POSTGRES_PORT', 5432)),
-            'database': os.getenv('POSTGRES_DB', 'local'),
-            'user': os.getenv('POSTGRES_USER', 'postgres'),
-            'password': os.getenv('POSTGRES_PASSWORD', 'password')
+            'host': settings.POSTGRES_HOST,
+            'port': int(settings.POSTGRES_PORT),
+            'database': settings.POSTGRES_DB,
+            'user': settings.POSTGRES_USER,
+            'password': settings.POSTGRES_PASSWORD
         }
         
         # Initialize connection pool
         try:
-            from api.constants import DB_POOL_MIN_CONNECTIONS, DB_POOL_MAX_CONNECTIONS
             self.connection_pool = psycopg2.pool.ThreadedConnectionPool(
                 minconn=DB_POOL_MIN_CONNECTIONS,
                 maxconn=DB_POOL_MAX_CONNECTIONS,
@@ -33,7 +34,11 @@ class DatabaseService:
     def get_connection(self):
         """Get database connection from pool"""
         try:
-            return self.connection_pool.getconn()
+            conn = self.connection_pool.getconn()
+            # Test connection health
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT 1")
+            return conn
         except Exception as e:
             logger.error(f"Failed to get connection from pool: {e}")
             raise

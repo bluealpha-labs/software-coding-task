@@ -58,9 +58,11 @@ export function Dashboard() {
 
       if (!token) {
         console.error("No authentication token found");
+        setLoading(false);
         return;
       }
 
+      console.log("Fetching dashboard data with token:", token.substring(0, 20) + "...");
       const headers = { Authorization: `Bearer ${token}` };
 
       const [summaryRes, contributionRes, responseRes] = await Promise.all([
@@ -74,6 +76,7 @@ export function Dashboard() {
       setResponseCurvesData(responseRes.data);
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
+      // Don't set loading to false on error, let user retry
     } finally {
       setLoading(false);
     }
@@ -81,10 +84,18 @@ export function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-          <p className="mt-4 text-lg">Loading dashboard...</p>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-600 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+          <p className="mt-6 text-lg font-medium text-gray-900">
+            Loading dashboard...
+          </p>
+          <p className="mt-2 text-sm text-gray-500">Preparing your analytics</p>
         </div>
       </div>
     );

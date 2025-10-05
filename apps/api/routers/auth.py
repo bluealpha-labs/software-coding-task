@@ -10,6 +10,7 @@ from api.services.auth_service import (
     get_user, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 )
 from api.logging_config import get_logger
+from api.services.audit_service import audit_service
 
 logger = get_logger(__name__)
 
@@ -65,6 +66,16 @@ async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends
         user = authenticate_user(form_data.username, form_data.password)
         if not user:
             logger.warning(f"Failed login attempt for email: {form_data.username}")
+            
+            # Log failed authentication
+            audit_service.log_auth_event(
+                event_type="login_failed",
+                user_email=form_data.username,
+                success=False,
+                ip_address=request.client.host if request.client else None,
+                user_agent=request.headers.get("user-agent")
+            )
+            
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect email or password",
@@ -75,6 +86,16 @@ async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends
             data={"sub": user.email}, expires_delta=access_token_expires
         )
         logger.info(f"Successful login for email: {form_data.username}")
+        
+        # Log successful authentication
+        audit_service.log_auth_event(
+            event_type="login_success",
+            user_email=form_data.username,
+            success=True,
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent")
+        )
+        
         return {"access_token": access_token, "token_type": "bearer"}
     except HTTPException:
         raise

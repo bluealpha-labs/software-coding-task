@@ -119,7 +119,7 @@ class DataService:
             )
             
             # Cache the result for 1 hour
-            cache_service.set(cache_key, metrics.dict(), expire=3600)
+            cache_service.set(cache_key, metrics.dict(), ttl=3600)
             return metrics
         
         # Fallback if no data
@@ -149,7 +149,7 @@ class DataService:
             )
             
             # Cache the result for 1 hour
-            cache_service.set(cache_key, data.dict(), expire=3600)
+            cache_service.set(cache_key, data.dict(), ttl=3600)
             return data
         
         return ContributionData(channels=[], spend=[], contribution=[])
@@ -171,7 +171,7 @@ class DataService:
             )
             
             # Cache the result for 1 hour
-            cache_service.set(cache_key, data.dict(), expire=3600)
+            cache_service.set(cache_key, data.dict(), ttl=3600)
             return data
         
         return ResponseCurvesData(channels=[], curves={})

@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toastService } from "./toast";
 
 interface User {
   id: number;
@@ -81,6 +82,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         headers: { Authorization: `Bearer ${access_token}` },
       });
       setUser(userResponse.data);
+      toastService.success("Login successful!");
+      
+      // Small delay to ensure cookie is set before redirect
+      await new Promise(resolve => setTimeout(resolve, 100));
     } catch (error: any) {
       console.error("Login failed:", error);
 
@@ -91,19 +96,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const message = error.response.data?.detail || "Login failed";
 
         if (status === 401) {
+          toastService.error("Invalid email or password");
           throw new Error("Invalid email or password");
         } else if (status === 422) {
+          toastService.error("Invalid input data");
           throw new Error("Invalid input data");
         } else if (status >= 500) {
+          toastService.error("Server error. Please try again later.");
           throw new Error("Server error. Please try again later.");
         } else {
+          toastService.error(message);
           throw new Error(message);
         }
       } else if (error.request) {
         // Network error
+        toastService.error("Network error. Please check your connection.");
         throw new Error("Network error. Please check your connection.");
       } else {
         // Other error
+        toastService.error("An unexpected error occurred. Please try again.");
         throw new Error("An unexpected error occurred. Please try again.");
       }
     }
@@ -123,6 +134,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Auto-login after registration
       await login(email, password);
+      toastService.success("Registration successful!");
     } catch (error: any) {
       console.error("Registration failed:", error);
 

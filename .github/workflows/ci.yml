@@ -1,0 +1,132 @@
+name: CI
+
+on:
+    push:
+        branches: [main, dev]
+    pull_request:
+        branches: [main, dev]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:16.4
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: password
+                    POSTGRES_DB: test_local
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 5432:5432
+
+            redis:
+                image: redis:7-alpine
+                options: >-
+                    --health-cmd "redis-cli ping"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 6379:6379
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+
+            - name: Setup Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.12"
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v2
+              with:
+                  version: 8
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Install Python dependencies
+              run: |
+                  cd apps/api
+                  pip install -e ".[test]"
+
+            - name: Run database migrations
+              run: |
+                  cd apps/api
+                  python run_migration.py
+              env:
+                  POSTGRES_HOST: localhost
+                  POSTGRES_PORT: 5432
+                  POSTGRES_USER: postgres
+                  POSTGRES_PASSWORD: password
+                  POSTGRES_DB: test_local
+
+            - name: Run API tests
+              run: |
+                  cd apps/api
+                  pytest tests/ -v --cov=api --cov-report=xml
+              env:
+                  POSTGRES_HOST: localhost
+                  POSTGRES_PORT: 5432
+                  POSTGRES_USER: postgres
+                  POSTGRES_PASSWORD: password
+                  POSTGRES_DB: test_local
+                  REDIS_HOST: localhost
+                  REDIS_PORT: 6379
+
+            - name: Run frontend tests
+              run: |
+                  cd apps/web
+                  pnpm test --coverage --watchAll=false
+
+            - name: Run frontend typecheck
+              run: |
+                  cd apps/web
+                  pnpm typecheck
+
+            - name: Run frontend lint
+              run: |
+                  cd apps/web
+                  pnpm lint
+
+            - name: Build frontend
+              run: |
+                  cd apps/web
+                  pnpm build
+
+            - name: Upload coverage reports
+              uses: codecov/codecov-action@v3
+              with:
+                  files: ./apps/api/coverage.xml
+                  flags: api
+                  name: api-coverage
+
+    security:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Run Trivy vulnerability scanner
+              uses: aquasecurity/trivy-action@master
+              with:
+                  scan-type: "fs"
+                  scan-ref: "."
+                  format: "sarif"
+                  output: "trivy-results.sarif"
+
+            - name: Upload Trivy scan results
+              uses: github/codeql-action/upload-sarif@v2
+              with:
+                  sarif_file: "trivy-results.sarif"

@@ -1,23 +1,31 @@
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, EmailStr, validator
 from typing import Optional
 from datetime import datetime
-from api.constants import PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH, FULL_NAME_MAX_LENGTH
+from enum import Enum
+import re
+
+class UserRole(str, Enum):
+    """User roles for RBAC."""
+    USER = "user"
+    ADMIN = "admin"
 
 class UserBase(BaseModel):
-    email: EmailStr = Field(..., max_length=EMAIL_MAX_LENGTH)
-    full_name: Optional[str] = Field(None, max_length=FULL_NAME_MAX_LENGTH)
+    email: EmailStr
+    full_name: Optional[str] = None
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=PASSWORD_MIN_LENGTH, max_length=PASSWORD_MAX_LENGTH)
+    password: str
     
     @validator('password')
     def validate_password(cls, v):
-        if not v:
-            raise ValueError('Password cannot be empty')
-        if len(v) < PASSWORD_MIN_LENGTH:
-            raise ValueError(f'Password must be at least {PASSWORD_MIN_LENGTH} characters long')
-        if len(v) > PASSWORD_MAX_LENGTH:
-            raise ValueError(f'Password must be no more than {PASSWORD_MAX_LENGTH} characters long')
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters long')
+        if not re.search(r'[A-Z]', v):
+            raise ValueError('Password must contain at least one uppercase letter')
+        if not re.search(r'[a-z]', v):
+            raise ValueError('Password must contain at least one lowercase letter')
+        if not re.search(r'\d', v):
+            raise ValueError('Password must contain at least one digit')
         return v
 
 class UserLogin(BaseModel):
@@ -26,9 +34,9 @@ class UserLogin(BaseModel):
 
 class User(UserBase):
     id: int
-    is_active: bool = True
+    is_active: bool
     created_at: datetime
-
+    
     class Config:
         from_attributes = True
 
