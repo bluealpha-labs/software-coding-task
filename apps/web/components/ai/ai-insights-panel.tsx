@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card";
 import { Badge } from "@workspace/ui/components/badge";
+import { Button } from "@workspace/ui/components/button";
 import { useAIInsights } from "../../hooks/useDashboardData";
 import {
   Brain,
@@ -15,9 +16,12 @@ import {
   AlertTriangle,
   Lightbulb,
   RefreshCw,
+  CheckCircle,
+  XCircle,
+  Info,
 } from "lucide-react";
-import { Button } from "@workspace/ui/components/button";
 import { useQueryClient } from "react-query";
+import { cn } from "@workspace/ui/lib/utils";
 
 interface AIInsights {
   recommendations: string[];
@@ -38,17 +42,43 @@ export function AIInsightsPanel() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5" />
-            AI Insights
-          </CardTitle>
-          <CardDescription>Loading AI-powered insights...</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5" />
+                AI Insights
+              </CardTitle>
+              <CardDescription>Loading AI-powered insights...</CardDescription>
+            </div>
+            <Button variant="outline" size="sm" disabled>
+              <RefreshCw className="h-4 w-4 animate-spin" />
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
+          {/* Loading skeleton */}
           <div className="space-y-4">
-            <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-            <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-muted animate-pulse">
+                <div className="h-4 w-4 bg-muted-foreground/20 rounded"></div>
+              </div>
+              <div className="h-4 w-32 bg-muted animate-pulse rounded"></div>
+              <div className="h-5 w-8 bg-muted animate-pulse rounded ml-auto"></div>
+            </div>
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-3 p-4 rounded-lg border bg-muted/20"
+                >
+                  <div className="h-4 w-4 bg-muted animate-pulse rounded mt-0.5 flex-shrink-0"></div>
+                  <div className="space-y-2 flex-1">
+                    <div className="h-3 bg-muted animate-pulse rounded w-full"></div>
+                    <div className="h-3 bg-muted animate-pulse rounded w-3/4"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -59,38 +89,60 @@ export function AIInsightsPanel() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5" />
-            AI Insights
-          </CardTitle>
-          <CardDescription>Unable to load AI insights</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5" />
+                AI Insights
+              </CardTitle>
+              <CardDescription>Unable to load AI insights</CardDescription>
+            </div>
+            <Button onClick={handleRefresh} variant="outline" size="sm">
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Please try again later.</p>
+          <div className="text-center py-8">
+            <div className="p-4 rounded-full bg-destructive/10 w-fit mx-auto mb-4">
+              <AlertTriangle className="h-8 w-8 text-destructive" />
+            </div>
+            <h3 className="font-semibold text-foreground mb-2">
+              Failed to Load Insights
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              There was an error loading AI insights. Please try again.
+            </p>
+            <Button onClick={handleRefresh} variant="outline" size="sm">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Retry
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );
   }
 
-  const confidenceColor =
-    insights.confidence_score > 0.7
-      ? "bg-green-100 text-green-800"
-      : insights.confidence_score > 0.4
-        ? "bg-yellow-100 text-yellow-800"
-        : "bg-red-100 text-red-800";
+  const getConfidenceVariant = (score: number) => {
+    if (score > 0.7) return "default";
+    if (score > 0.4) return "secondary";
+    return "destructive";
+  };
+
+  const confidenceVariant = getConfidenceVariant(insights.confidence_score);
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
             <CardTitle className="flex items-center gap-2">
               <Brain className="h-5 w-5" />
               AI Insights
             </CardTitle>
-            <CardDescription>
-              AI-powered analysis of your marketing performance
-              <Badge className={`ml-2 ${confidenceColor}`}>
+            <CardDescription className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <span>AI-powered analysis of your marketing performance</span>
+              <Badge variant={confidenceVariant} className="w-fit">
                 {Math.round(insights.confidence_score * 100)}% confidence
               </Badge>
             </CardDescription>
@@ -100,71 +152,99 @@ export function AIInsightsPanel() {
             variant="outline"
             size="sm"
             disabled={isLoading}
+            className="self-start sm:self-center"
           >
             <RefreshCw
               className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
             />
+            <span className="sr-only">Refresh insights</span>
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-8">
         {/* Recommendations */}
         {insights.recommendations && insights.recommendations.length > 0 && (
-          <div>
-            <h4 className="flex items-center gap-2 font-semibold mb-3">
-              <Lightbulb className="h-4 w-4 text-yellow-500" />
-              Recommendations
-            </h4>
-            <ul className="space-y-2">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20">
+                <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h4 className="font-semibold text-foreground">Recommendations</h4>
+              <Badge variant="secondary" className="ml-auto">
+                {insights.recommendations.length}
+              </Badge>
+            </div>
+            <div className="space-y-3">
               {insights.recommendations.map((rec: string, index: number) => (
-                <li
+                <div
                   key={index}
-                  className="text-sm p-2 bg-blue-50 rounded-md border-l-4 border-blue-400"
+                  className="flex items-start gap-3 p-4 rounded-lg border border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20"
                 >
-                  {rec}
-                </li>
+                  <CheckCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm text-foreground leading-relaxed">
+                    {rec}
+                  </p>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
 
         {/* Anomalies */}
         {insights.anomalies && insights.anomalies.length > 0 && (
-          <div>
-            <h4 className="flex items-center gap-2 font-semibold mb-3">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
-              Anomalies Detected
-            </h4>
-            <ul className="space-y-2">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/20">
+                <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
+              </div>
+              <h4 className="font-semibold text-foreground">
+                Anomalies Detected
+              </h4>
+              <Badge variant="destructive" className="ml-auto">
+                {insights.anomalies.length}
+              </Badge>
+            </div>
+            <div className="space-y-3">
               {insights.anomalies.map((anomaly: string, index: number) => (
-                <li
+                <div
                   key={index}
-                  className="text-sm p-2 bg-red-50 rounded-md border-l-4 border-red-400"
+                  className="flex items-start gap-3 p-4 rounded-lg border border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/20"
                 >
-                  {anomaly}
-                </li>
+                  <XCircle className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm text-foreground leading-relaxed">
+                    {anomaly}
+                  </p>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
 
         {/* Trends */}
         {insights.trends && insights.trends.length > 0 && (
-          <div>
-            <h4 className="flex items-center gap-2 font-semibold mb-3">
-              <TrendingUp className="h-4 w-4 text-green-500" />
-              Trends Analysis
-            </h4>
-            <ul className="space-y-2">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/20">
+                <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
+              </div>
+              <h4 className="font-semibold text-foreground">Trends Analysis</h4>
+              <Badge variant="outline" className="ml-auto">
+                {insights.trends.length}
+              </Badge>
+            </div>
+            <div className="space-y-3">
               {insights.trends.map((trend: string, index: number) => (
-                <li
+                <div
                   key={index}
-                  className="text-sm p-2 bg-green-50 rounded-md border-l-4 border-green-400"
+                  className="flex items-start gap-3 p-4 rounded-lg border border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/20"
                 >
-                  {trend}
-                </li>
+                  <Info className="h-4 w-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm text-foreground leading-relaxed">
+                    {trend}
+                  </p>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
 
@@ -172,11 +252,16 @@ export function AIInsightsPanel() {
         {(!insights.recommendations || insights.recommendations.length === 0) &&
           (!insights.anomalies || insights.anomalies.length === 0) &&
           (!insights.trends || insights.trends.length === 0) && (
-            <div className="text-center py-8">
-              <Brain className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-              <p className="text-muted-foreground">
-                No specific insights available at this time. Continue collecting
-                data for more detailed analysis.
+            <div className="text-center py-12">
+              <div className="p-4 rounded-full bg-muted/50 w-fit mx-auto mb-4">
+                <Brain className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">
+                No Insights Available
+              </h3>
+              <p className="text-muted-foreground text-sm max-w-sm mx-auto">
+                Continue collecting data for more detailed AI analysis and
+                recommendations.
               </p>
             </div>
           )}

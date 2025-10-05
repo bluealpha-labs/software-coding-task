@@ -5727,3 +5727,4 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 18:10:32,008 - api.main - INFO - All migrations completed successfully
 2025-10-04 18:10:32,009 - uvicorn.error - INFO - Application startup complete.
 2025-10-04 18:10:32,094 - watchfiles.main - INFO - 6 changes detected
+2025-10-04 18:14:08,619 - api.routers.dashboard - INFO - Summary metrics request completed in 0.000s for user admin@example.com
