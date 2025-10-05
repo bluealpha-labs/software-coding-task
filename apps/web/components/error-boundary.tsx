@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import React from "react";
 import { Button } from "@workspace/ui/components/button";
 import {
   Card,
@@ -9,80 +9,188 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 
-interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
+// Optional Sentry import - gracefully handle if not available
+let Sentry: any = null;
+try {
+  Sentry = require("@sentry/nextjs");
+} catch (error) {
+  console.warn("Sentry not available:", error);
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
+  eventId?: string;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ComponentType<{ error: Error; resetError: () => void }>;
+}
+
+export class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return {
+      hasError: true,
+      error,
+    };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    // Log to Sentry if available
+    let eventId: string | undefined;
+    if (Sentry) {
+      try {
+        eventId = Sentry.captureException(error, {
+          contexts: {
+            react: {
+              componentStack: errorInfo.componentStack,
+            },
+          },
+          tags: {
+            component: "ErrorBoundary",
+          },
+        });
+      } catch (sentryError) {
+        console.warn("Failed to log to Sentry:", sentryError);
+      }
+    }
+
+    this.setState({ eventId });
+
     console.error("Error caught by boundary:", error, errorInfo);
   }
+
+  resetError = () => {
+    this.setState({ hasError: false, error: undefined, eventId: undefined });
+  };
 
   render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
-        return this.props.fallback;
+        const FallbackComponent = this.props.fallback;
+        return (
+          <FallbackComponent
+            error={this.state.error!}
+            resetError={this.resetError}
+          />
+        );
       }
 
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <Card className="w-full max-w-md">
-            <CardHeader>
-              <CardTitle className="text-red-600">
-                Something went wrong
-              </CardTitle>
-              <CardDescription>
-                An unexpected error occurred. Please try refreshing the page.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {process.env.NODE_ENV === "development" && this.state.error && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-                  <h4 className="font-medium text-red-800">Error Details:</h4>
-                  <pre className="mt-2 text-sm text-red-700 whitespace-pre-wrap">
-                    {this.state.error.message}
-                  </pre>
-                </div>
-              )}
-              <div className="flex space-x-2">
-                <Button
-                  onClick={() => window.location.reload()}
-                  className="flex-1"
-                >
-                  Refresh Page
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    this.setState({ hasError: false, error: undefined })
-                  }
-                  className="flex-1"
-                >
-                  Try Again
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <DefaultErrorFallback
+          error={this.state.error!}
+          resetError={this.resetError}
+          eventId={this.state.eventId}
+        />
       );
     }
 
     return this.props.children;
   }
+}
+
+interface DefaultErrorFallbackProps {
+  error: Error;
+  resetError: () => void;
+  eventId?: string;
+}
+
+function DefaultErrorFallback({
+  error,
+  resetError,
+  eventId,
+}: DefaultErrorFallbackProps) {
+  const handleReportError = () => {
+    if (eventId && Sentry) {
+      try {
+        Sentry.showReportDialog({ eventId });
+      } catch (error) {
+        console.warn("Failed to show Sentry report dialog:", error);
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+            <AlertTriangle className="h-6 w-6 text-red-600" />
+          </div>
+          <CardTitle className="text-xl font-semibold text-gray-900">
+            Something went wrong
+          </CardTitle>
+          <CardDescription>
+            We're sorry, but something unexpected happened. Our team has been
+            notified.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {process.env.NODE_ENV === "development" && (
+            <div className="rounded-md bg-gray-100 p-3">
+              <p className="text-sm font-medium text-gray-700">
+                Error Details:
+              </p>
+              <p className="text-sm text-gray-600 mt-1">{error.message}</p>
+            </div>
+          )}
+
+          <div className="flex flex-col space-y-2">
+            <Button onClick={resetError} className="w-full">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Try Again
+            </Button>
+
+            {eventId && (
+              <Button
+                onClick={handleReportError}
+                variant="outline"
+                className="w-full"
+              >
+                Report Issue
+              </Button>
+            )}
+          </div>
+
+          <p className="text-xs text-gray-500 text-center">
+            If this problem persists, please contact support.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// Hook for functional components
+export function useErrorHandler() {
+  return (error: Error, errorInfo?: React.ErrorInfo) => {
+    if (Sentry) {
+      try {
+        Sentry.captureException(error, {
+          contexts: {
+            react: errorInfo
+              ? { componentStack: errorInfo.componentStack }
+              : undefined,
+          },
+          tags: {
+            component: "useErrorHandler",
+          },
+        });
+      } catch (sentryError) {
+        console.warn("Failed to log to Sentry:", sentryError);
+      }
+    }
+    console.error("Error in useErrorHandler:", error, errorInfo);
+  };
 }

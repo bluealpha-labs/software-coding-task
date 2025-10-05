@@ -91,7 +91,7 @@ export const api = {
 
   // Data source info
   getDataSourceInfo: (): Promise<AxiosResponse<any>> =>
-    apiClient.get("/api/data-source"),
+    apiClient.get("/api/mmm-dev/data-source"),
 
   // Health check
   getHealth: (): Promise<AxiosResponse<any>> => apiClient.get("/health"),
