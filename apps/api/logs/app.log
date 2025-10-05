@@ -6656,3 +6656,30 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 20:09:15,504 - api.routers.mmm_dev - INFO - Returning contributions from cache
 2025-10-04 20:09:15,554 - api.routers.mmm_dev - INFO - Returning response curve for TV from cache
 2025-10-04 20:09:20,026 - api.routers.mmm_dev - INFO - Response curve request for Digital completed in 0.000s for dev user
+2025-10-04 20:11:28,020 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:11:28,024 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:11:28,066 - api.routers.mmm_dev - INFO - Returning response curve for TV from cache
+2025-10-04 20:11:34,046 - uvicorn.error - INFO - Shutting down
+2025-10-04 20:11:34,150 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 20:11:34,151 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 20:11:34,152 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 20:11:34,152 - api.main - INFO - Database connection pool closed
+2025-10-04 20:11:34,152 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 20:11:34,153 - uvicorn.error - INFO - Finished server process [33908]
+2025-10-04 20:11:34,375 - uvicorn.error - INFO - Stopping reloader process [33497]
+2025-10-04 20:12:09,602 - uvicorn.error - INFO - Will watch for changes in these directories: ['/Users/admin/dev/tmp/software-coding-task/apps/api']
+2025-10-04 20:12:09,606 - uvicorn.error - INFO - Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2025-10-04 20:12:09,607 - uvicorn.error - INFO - Started reloader process [51122] using WatchFiles
+2025-10-04 20:12:14,833 - uvicorn.error - INFO - Started server process [51642]
+2025-10-04 20:12:14,834 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 20:12:14,834 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 20:12:14,834 - api.main - INFO - Running database migrations...
+2025-10-04 20:12:14,854 - api.main - INFO - All migrations completed successfully
+2025-10-04 20:12:14,854 - api.main - INFO - Loading Meridian model...
+2025-10-04 20:12:14,854 - api.meridian_adapter - ERROR - Error loading Meridian model: No module named 'meridian'
+2025-10-04 20:12:14,854 - api.meridian_adapter - INFO - Creating mock model for development
+2025-10-04 20:12:14,855 - api.meridian_adapter - INFO - Creating mock Meridian model for development
+2025-10-04 20:12:14,855 - api.meridian_adapter - INFO - Created mock model with 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:12:14,855 - api.main - INFO - Successfully loaded Meridian model from /Users/admin/dev/tmp/software-coding-task/apps/api/saved_mmm.pkl
+2025-10-04 20:12:14,855 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:12:14,855 - uvicorn.error - INFO - Application startup complete.
