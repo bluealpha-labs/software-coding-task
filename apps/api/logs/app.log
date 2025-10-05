@@ -6788,3 +6788,47 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 20:46:21,974 - uvicorn.error - INFO - Application shutdown complete.
 2025-10-04 20:46:21,976 - uvicorn.error - INFO - Finished server process [45470]
 2025-10-04 20:46:22,602 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:46:27,288 - uvicorn.error - INFO - Started server process [65661]
+2025-10-04 20:46:27,288 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 20:46:27,289 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 20:46:27,289 - api.main - INFO - Running database migrations...
+2025-10-04 20:46:27,298 - api.main - INFO - All migrations completed successfully
+2025-10-04 20:46:27,298 - api.main - INFO - Loading Meridian model...
+2025-10-04 20:46:27,299 - api.meridian_adapter - ERROR - Error loading Meridian model: No module named 'meridian'
+2025-10-04 20:46:27,299 - api.meridian_adapter - INFO - Creating mock model for development
+2025-10-04 20:46:27,299 - api.meridian_adapter - INFO - Creating mock Meridian model for development
+2025-10-04 20:46:27,299 - api.meridian_adapter - INFO - Created mock model with 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:46:27,299 - api.main - INFO - Successfully loaded Meridian model from /Users/admin/dev/tmp/software-coding-task/apps/api/saved_mmm.pkl
+2025-10-04 20:46:27,299 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:46:27,299 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 20:46:37,860 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:46:37,862 - uvicorn.error - WARNING - WatchFiles detected changes in 'run_migration.py'. Reloading...
+2025-10-04 20:46:37,899 - uvicorn.error - INFO - Shutting down
+2025-10-04 20:46:38,002 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 20:46:38,004 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 20:46:38,004 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 20:46:38,004 - api.main - INFO - Database connection pool closed
+2025-10-04 20:46:38,004 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 20:46:38,005 - uvicorn.error - INFO - Finished server process [65661]
+2025-10-04 20:46:38,653 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:46:43,200 - uvicorn.error - INFO - Started server process [66679]
+2025-10-04 20:46:43,200 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 20:46:43,201 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 20:46:43,201 - api.main - INFO - Running database migrations...
+2025-10-04 20:46:43,212 - api.main - INFO - All migrations completed successfully
+2025-10-04 20:46:43,212 - api.main - INFO - Loading Meridian model...
+2025-10-04 20:46:43,213 - api.meridian_adapter - ERROR - Error loading Meridian model: No module named 'meridian'
+2025-10-04 20:46:43,213 - api.meridian_adapter - INFO - Creating mock model for development
+2025-10-04 20:46:43,213 - api.meridian_adapter - INFO - Creating mock Meridian model for development
+2025-10-04 20:46:43,213 - api.meridian_adapter - INFO - Created mock model with 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:46:43,213 - api.main - INFO - Successfully loaded Meridian model from /Users/admin/dev/tmp/software-coding-task/apps/api/saved_mmm.pkl
+2025-10-04 20:46:43,213 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:46:43,213 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 21:13:57,107 - uvicorn.error - INFO - Shutting down
+2025-10-04 21:13:57,223 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 21:13:57,228 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 21:13:57,233 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 21:13:57,234 - api.main - INFO - Database connection pool closed
+2025-10-04 21:13:57,234 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 21:13:57,235 - uvicorn.error - INFO - Finished server process [66679]
+2025-10-04 21:13:57,458 - uvicorn.error - INFO - Stopping reloader process [72582]

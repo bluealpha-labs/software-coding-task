@@ -373,7 +373,7 @@ export function AIInsightsPanel() {
         <RecommendationImplementer
           recommendation={selectedRecommendation}
           onImplementationComplete={(plan) => {
-            console.log("Implementation completed:", plan);
+            // Implementation completed
             setShowImplementer(false);
             setSelectedRecommendation("");
           }}

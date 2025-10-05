@@ -48,7 +48,7 @@ export function ContributionChart({
       const response = await mmmApi.getContributions();
       setData(response.data);
     } catch (error) {
-      console.error("Error fetching contribution data:", error);
+      // Error fetching contribution data
       toast.error("Failed to load contribution data");
     } finally {
       setLoading(false);
@@ -91,7 +91,6 @@ export function ContributionChart({
 
       onExplainRequest?.(explainRequest);
     } catch (error) {
-      console.error("Error getting AI explanation:", error);
       toast.error("Failed to get AI explanation");
     } finally {
       setExplaining(false);

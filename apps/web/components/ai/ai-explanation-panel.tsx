@@ -58,7 +58,6 @@ export function AIExplanationPanel({
       setExplanation(response.data);
       setCachedExplanation(request, response.data);
     } catch (error) {
-      console.error("Error getting AI explanation:", error);
       toast.error("Failed to get AI explanation");
     } finally {
       setLoading(false);
@@ -67,7 +66,7 @@ export function AIExplanationPanel({
 
   const handleDrillDown = (drilldown: string) => {
     // In a real implementation, this would trigger specific actions
-    console.log("Drill down requested:", drilldown);
+    // Drill down requested
     toast.success(`Analyzing: ${drilldown}`);
   };
 

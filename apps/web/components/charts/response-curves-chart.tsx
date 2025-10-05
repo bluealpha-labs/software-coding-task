@@ -71,8 +71,7 @@ export function ResponseCurvesChart({
         setSelectedChannel(channels[0] || "");
       }
     } catch (error) {
-      console.error("Error fetching channels:", error);
-      toast.error("Failed to load available channels");
+      toast.error("Failed to load channels");
     }
   };
 
@@ -82,8 +81,7 @@ export function ResponseCurvesChart({
       const response = await mmmApi.getResponseCurve(channel);
       setData(response.data);
     } catch (error) {
-      console.error("Error fetching response curve:", error);
-      toast.error("Failed to load response curve data");
+      toast.error("Failed to load response curve");
     } finally {
       setLoading(false);
     }
@@ -125,7 +123,6 @@ export function ResponseCurvesChart({
 
       onExplainRequest?.(explainRequest);
     } catch (error) {
-      console.error("Error getting AI explanation:", error);
       toast.error("Failed to get AI explanation");
     } finally {
       setExplaining(false);

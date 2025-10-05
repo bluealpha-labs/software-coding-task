@@ -1,9 +1,7 @@
 // Optional Sentry import
 let Sentry: any = null;
 try {
-  if (typeof require !== "undefined") {
-    Sentry = require("@sentry/nextjs");
-  }
+  Sentry = require("@sentry/nextjs");
 } catch (error) {
   // Silently handle missing Sentry - it's optional
 }

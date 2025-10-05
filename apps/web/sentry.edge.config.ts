@@ -3,7 +3,7 @@ let Sentry: any = null;
 try {
   Sentry = require("@sentry/nextjs");
 } catch (error) {
-  console.warn("Sentry not available:", error);
+  // Silently handle missing Sentry - it's optional
 }
 
 if (Sentry) {

@@ -10,6 +10,7 @@ import {
 } from "@workspace/ui/components/card";
 import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
+import { toast } from "react-hot-toast";
 // import { Badge } from "@workspace/ui/components/badge";
 import {
   Brain,
@@ -124,7 +125,7 @@ export function AIChatInterface({
 
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
-      console.error("Error generating AI response:", error);
+      toast.error("Failed to generate AI response");
       const errorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
         type: "ai",
