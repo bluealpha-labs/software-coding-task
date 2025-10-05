@@ -6684,3 +6684,51 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 20:12:14,855 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
 2025-10-04 20:12:14,855 - uvicorn.error - INFO - Application startup complete.
 2025-10-04 20:13:09,967 - api.routers.mmm_dev - INFO - Response curve request for Digital completed in 0.000s for dev user
+2025-10-04 20:18:06,988 - uvicorn.error - INFO - Will watch for changes in these directories: ['/Users/admin/dev/tmp/software-coding-task/apps/api']
+2025-10-04 20:18:06,995 - uvicorn.error - ERROR - [Errno 48] Address already in use
+2025-10-04 20:18:07,184 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:18:12,292 - uvicorn.error - INFO - Shutting down
+2025-10-04 20:18:12,395 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 20:18:12,396 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 20:18:12,396 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 20:18:12,396 - api.main - INFO - Database connection pool closed
+2025-10-04 20:18:12,397 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 20:18:12,397 - uvicorn.error - INFO - Finished server process [51642]
+2025-10-04 20:18:12,517 - uvicorn.error - INFO - Stopping reloader process [51122]
+2025-10-04 20:18:22,556 - uvicorn.error - INFO - Will watch for changes in these directories: ['/Users/admin/dev/tmp/software-coding-task/apps/api']
+2025-10-04 20:18:22,558 - uvicorn.error - INFO - Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2025-10-04 20:18:22,559 - uvicorn.error - INFO - Started reloader process [72582] using WatchFiles
+2025-10-04 20:18:27,513 - uvicorn.error - INFO - Started server process [72955]
+2025-10-04 20:18:27,514 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 20:18:27,514 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 20:18:27,515 - api.main - INFO - Running database migrations...
+2025-10-04 20:18:27,525 - api.main - INFO - All migrations completed successfully
+2025-10-04 20:18:27,526 - api.main - INFO - Loading Meridian model...
+2025-10-04 20:18:27,526 - api.meridian_adapter - ERROR - Error loading Meridian model: No module named 'meridian'
+2025-10-04 20:18:27,526 - api.meridian_adapter - INFO - Creating mock model for development
+2025-10-04 20:18:27,526 - api.meridian_adapter - INFO - Creating mock Meridian model for development
+2025-10-04 20:18:27,526 - api.meridian_adapter - INFO - Created mock model with 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:18:27,526 - api.main - INFO - Successfully loaded Meridian model from /Users/admin/dev/tmp/software-coding-task/apps/api/saved_mmm.pkl
+2025-10-04 20:18:27,526 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:18:27,526 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 20:18:48,768 - api.meridian_adapter - INFO - Extracted 6 contribution points
+2025-10-04 20:18:48,768 - api.routers.mmm_dev - INFO - Contributions request completed in 0.000s for dev user
+2025-10-04 20:18:48,773 - api.services.ai_service - INFO - Using mock AI service for development
+2025-10-04 20:18:48,773 - api.services.mock_ai_service - INFO - Generating mock AI insights for development
+2025-10-04 20:18:48,774 - api.services.ai_service - INFO - Generated AI insights with confidence score: 0.90
+2025-10-04 20:18:48,774 - api.routers.dashboard - INFO - AI insights request completed in 0.001s for user admin@example.com
+2025-10-04 20:18:48,778 - api.routers.dashboard - INFO - Summary metrics request completed in 0.000s for user admin@example.com
+2025-10-04 20:18:48,788 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:18:48,790 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:18:48,791 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:18:48,866 - api.routers.mmm_dev - INFO - Response curve request for TV completed in 0.000s for dev user
+2025-10-04 20:18:54,949 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:18:54,955 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:18:54,957 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:18:54,961 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:18:54,980 - api.routers.mmm_dev - INFO - Returning response curve for TV from cache
+2025-10-04 20:19:02,736 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:19:02,740 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:19:02,743 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:19:02,744 - api.routers.mmm_dev - INFO - Returning contributions from cache
+2025-10-04 20:19:02,765 - api.routers.mmm_dev - INFO - Returning response curve for TV from cache
