@@ -6742,3 +6742,39 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 20:39:55,568 - uvicorn.error - INFO - Application shutdown complete.
 2025-10-04 20:39:55,571 - uvicorn.error - INFO - Finished server process [72955]
 2025-10-04 20:39:56,161 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:40:01,393 - uvicorn.error - INFO - Started server process [44355]
+2025-10-04 20:40:01,394 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 20:40:01,394 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 20:40:01,394 - api.main - INFO - Running database migrations...
+2025-10-04 20:40:01,406 - api.main - INFO - All migrations completed successfully
+2025-10-04 20:40:01,406 - api.main - INFO - Loading Meridian model...
+2025-10-04 20:40:01,406 - api.meridian_adapter - ERROR - Error loading Meridian model: No module named 'meridian'
+2025-10-04 20:40:01,406 - api.meridian_adapter - INFO - Creating mock model for development
+2025-10-04 20:40:01,406 - api.meridian_adapter - INFO - Creating mock Meridian model for development
+2025-10-04 20:40:01,407 - api.meridian_adapter - INFO - Created mock model with 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:40:01,407 - api.main - INFO - Successfully loaded Meridian model from /Users/admin/dev/tmp/software-coding-task/apps/api/saved_mmm.pkl
+2025-10-04 20:40:01,407 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:40:01,407 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 20:40:14,116 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:40:14,118 - uvicorn.error - WARNING - WatchFiles detected changes in 'tests/test_rbac.py'. Reloading...
+2025-10-04 20:40:14,135 - uvicorn.error - INFO - Shutting down
+2025-10-04 20:40:14,242 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 20:40:14,244 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 20:40:14,244 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 20:40:14,244 - api.main - INFO - Database connection pool closed
+2025-10-04 20:40:14,245 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 20:40:14,246 - uvicorn.error - INFO - Finished server process [44355]
+2025-10-04 20:40:14,819 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:40:19,410 - uvicorn.error - INFO - Started server process [45470]
+2025-10-04 20:40:19,411 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 20:40:19,411 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 20:40:19,411 - api.main - INFO - Running database migrations...
+2025-10-04 20:40:19,416 - api.main - INFO - All migrations completed successfully
+2025-10-04 20:40:19,416 - api.main - INFO - Loading Meridian model...
+2025-10-04 20:40:19,416 - api.meridian_adapter - ERROR - Error loading Meridian model: No module named 'meridian'
+2025-10-04 20:40:19,416 - api.meridian_adapter - INFO - Creating mock model for development
+2025-10-04 20:40:19,416 - api.meridian_adapter - INFO - Creating mock Meridian model for development
+2025-10-04 20:40:19,416 - api.meridian_adapter - INFO - Created mock model with 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:40:19,417 - api.main - INFO - Successfully loaded Meridian model from /Users/admin/dev/tmp/software-coding-task/apps/api/saved_mmm.pkl
+2025-10-04 20:40:19,417 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
+2025-10-04 20:40:19,417 - uvicorn.error - INFO - Application startup complete.

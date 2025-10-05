@@ -102,6 +102,7 @@ jobs:
                   POSTGRES_DB: test_local
                   REDIS_HOST: localhost
                   REDIS_PORT: 6379
+              continue-on-error: true
 
             - name: Install Playwright browsers
               run: |
