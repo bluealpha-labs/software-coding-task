@@ -3,6 +3,9 @@ AI-powered insights service for marketing mix modeling data analysis.
 """
 import numpy as np
 import pandas as pd
+import hashlib
+import json
+from datetime import datetime
 from typing import Dict, List, Any, Tuple
 from api.logging_config import get_logger
 from api.services.data_service import data_service
@@ -10,6 +13,7 @@ from api.services.cache_service import cache_service, cache_key
 from api.services.mock_ai_service import mock_ai_service
 from api.config import get_settings
 from api.constants import CACHE_TTL_DEFAULT
+from api.schemas import AIExplainRequest, AIExplainResponse
 
 logger = get_logger(__name__)
 
@@ -227,6 +231,233 @@ class AIService:
         
         logger.info(f"Generated real AI insights with confidence score: {confidence_score:.2f}")
         return insights
+    
+    def explain(self, request: AIExplainRequest) -> AIExplainResponse:
+        """Generate AI explanation for a specific chart context"""
+        # Create cache key based on request content
+        request_hash = self._create_request_hash(request)
+        cache_key_str = cache_key("ai", "explain", hash=request_hash)
+        
+        # Try to get from cache first
+        cached_response = cache_service.get(cache_key_str)
+        if cached_response:
+            logger.info("Returning AI explanation from cache")
+            return AIExplainResponse(**cached_response)
+        
+        # Generate explanation
+        explanation = self._generate_explanation(request)
+        
+        # Cache the response for 30 minutes
+        cache_service.set(cache_key_str, explanation.dict(), ttl=1800)
+        
+        logger.info(f"Generated AI explanation for {request.chart_type} chart")
+        return explanation
+    
+    def _create_request_hash(self, request: AIExplainRequest) -> str:
+        """Create a hash for request memoization"""
+        # Create a deterministic hash of the request
+        request_data = {
+            "chart_type": request.chart_type,
+            "metric": request.metric,
+            "series_hash": hashlib.md5(json.dumps(request.series, sort_keys=True).encode()).hexdigest()[:8],
+            "filters": request.filters or {},
+            "date_range": request.date_range or {}
+        }
+        return hashlib.md5(json.dumps(request_data, sort_keys=True).encode()).hexdigest()[:16]
+    
+    def _generate_explanation(self, request: AIExplainRequest) -> AIExplainResponse:
+        """Generate explanation based on chart context"""
+        try:
+            # Extract key statistics from the series data
+            stats = self._extract_series_stats(request.series)
+            
+            # Generate context-aware explanation
+            if request.chart_type == "contribution":
+                return self._explain_contribution_chart(request, stats)
+            elif request.chart_type == "response_curve":
+                return self._explain_response_curve_chart(request, stats)
+            else:
+                return self._explain_generic_chart(request, stats)
+                
+        except Exception as e:
+            logger.error(f"Error generating explanation: {e}")
+            return self._create_fallback_explanation(request)
+    
+    def _extract_series_stats(self, series: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Extract statistical summary from series data"""
+        if not series:
+            return {}
+        
+        try:
+            # Extract numeric values
+            values = []
+            for item in series:
+                if isinstance(item, dict):
+                    # Try different possible value keys
+                    for key in ['value', 'response', 'contribution', 'spend']:
+                        if key in item and isinstance(item[key], (int, float)):
+                            values.append(item[key])
+                            break
+            
+            if not values:
+                return {}
+            
+            values_array = np.array(values)
+            
+            return {
+                'count': len(values),
+                'min': float(np.min(values_array)),
+                'max': float(np.max(values_array)),
+                'mean': float(np.mean(values_array)),
+                'std': float(np.std(values_array)),
+                'sum': float(np.sum(values_array)),
+                'range': float(np.max(values_array) - np.min(values_array))
+            }
+        except Exception as e:
+            logger.error(f"Error extracting series stats: {e}")
+            return {}
+    
+    def _explain_contribution_chart(self, request: AIExplainRequest, stats: Dict[str, Any]) -> AIExplainResponse:
+        """Generate explanation for contribution chart"""
+        total_contribution = stats.get('sum', 0)
+        max_contribution = stats.get('max', 0)
+        min_contribution = stats.get('min', 0)
+        
+        # Find top and bottom performers
+        series_data = request.series
+        if series_data:
+            sorted_series = sorted(series_data, key=lambda x: x.get('value', 0), reverse=True)
+            top_performer = sorted_series[0] if sorted_series else {}
+            bottom_performer = sorted_series[-1] if sorted_series else {}
+        else:
+            top_performer = {}
+            bottom_performer = {}
+        
+        # Generate summary
+        if total_contribution > 0:
+            summary = f"Total contribution across all channels is ${total_contribution:,.0f}. "
+            if max_contribution > min_contribution * 3:
+                summary += f"The top performer ({top_performer.get('channel', 'Unknown')}) significantly outperforms others, suggesting potential for budget reallocation."
+            else:
+                summary += f"Channel performance is relatively balanced, with the top performer contributing ${max_contribution:,.0f}."
+        else:
+            summary = "Contribution data shows limited performance across channels, indicating potential optimization opportunities."
+        
+        # Generate drill-downs
+        drilldowns = [
+            "Analyze seasonal patterns in top performer",
+            "Compare efficiency ratios (contribution/spend)",
+            "Investigate underperforming channels"
+        ]
+        
+        # Generate caveat
+        caveat = "Analysis based on current data snapshot. Consider external factors like seasonality, market conditions, and campaign timing that may influence results."
+        
+        # Calculate confidence score
+        confidence_score = min(0.9, 0.5 + (len(series_data) * 0.1))
+        
+        return AIExplainResponse(
+            summary=summary,
+            drilldowns=drilldowns,
+            caveat=caveat,
+            confidence_score=confidence_score,
+            generated_at=datetime.now().isoformat()
+        )
+    
+    def _explain_response_curve_chart(self, request: AIExplainRequest, stats: Dict[str, Any]) -> AIExplainResponse:
+        """Generate explanation for response curve chart"""
+        max_response = stats.get('max', 0)
+        max_spend = max([point.get('spend', 0) for point in request.series], default=0)
+        
+        # Calculate efficiency metrics
+        if max_spend > 0:
+            efficiency = max_response / max_spend
+        else:
+            efficiency = 0
+        
+        # Generate summary
+        if efficiency > 1.0:
+            summary = f"Channel shows strong efficiency with {efficiency:.2f}x return on investment. "
+            if efficiency > 1.5:
+                summary += "The response curve suggests potential for increased investment before reaching saturation."
+            else:
+                summary += "Current spend levels appear optimal based on diminishing returns analysis."
+        elif efficiency > 0.5:
+            summary = f"Channel shows moderate efficiency ({efficiency:.2f}x ROI). "
+            summary += "Consider optimizing spend allocation or improving targeting to enhance performance."
+        else:
+            summary = f"Channel shows low efficiency ({efficiency:.2f}x ROI). "
+            summary += "Immediate review of strategy and potential budget reallocation recommended."
+        
+        # Generate drill-downs
+        drilldowns = [
+            "Identify optimal spend level for maximum ROI",
+            "Analyze audience targeting effectiveness",
+            "Compare with industry benchmarks"
+        ]
+        
+        # Generate caveat
+        caveat = "Response curves are based on historical data and may not account for market saturation, competitive responses, or external economic factors."
+        
+        # Calculate confidence score
+        confidence_score = min(0.85, 0.6 + (len(request.series) * 0.05))
+        
+        return AIExplainResponse(
+            summary=summary,
+            drilldowns=drilldowns,
+            caveat=caveat,
+            confidence_score=confidence_score,
+            generated_at=datetime.now().isoformat()
+        )
+    
+    def _explain_generic_chart(self, request: AIExplainRequest, stats: Dict[str, Any]) -> AIExplainResponse:
+        """Generate explanation for generic chart types"""
+        mean_value = stats.get('mean', 0)
+        std_value = stats.get('std', 0)
+        
+        # Generate summary
+        if std_value > 0:
+            cv = std_value / mean_value if mean_value > 0 else 0
+            if cv > 0.5:
+                summary = f"Data shows high variability (CV: {cv:.2f}), indicating significant performance differences across data points."
+            else:
+                summary = f"Data shows relatively consistent performance with mean value of ${mean_value:,.0f}."
+        else:
+            summary = f"Analysis shows consistent values around ${mean_value:,.0f}."
+        
+        # Generate drill-downs
+        drilldowns = [
+            "Investigate outliers and anomalies",
+            "Analyze temporal trends",
+            "Compare with historical benchmarks"
+        ]
+        
+        # Generate caveat
+        caveat = "Analysis is based on current data and may not reflect future performance or account for external market factors."
+        
+        # Calculate confidence score
+        confidence_score = 0.7
+        
+        return AIExplainResponse(
+            summary=summary,
+            drilldowns=drilldowns,
+            caveat=caveat,
+            confidence_score=confidence_score,
+            generated_at=datetime.now().isoformat()
+        )
+    
+    def _create_fallback_explanation(self, request: AIExplainRequest) -> AIExplainResponse:
+        """Create fallback explanation when analysis fails"""
+        return AIExplainResponse(
+            summary=f"Analysis of {request.chart_type} chart shows data patterns that require further investigation. The {request.metric} metric displays varying performance across the analyzed period.",
+            drilldowns=[
+                "Review data quality and completeness",
+                "Analyze temporal patterns",
+                "Compare with industry benchmarks"
+            ],
+            caveat="Analysis may be limited by data availability or quality. Consider additional data sources for more comprehensive insights.",
+            confidence_score=0.3
+        )
 
 # Global AI service instance
 ai_service = AIService()

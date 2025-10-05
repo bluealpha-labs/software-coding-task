@@ -14,9 +14,12 @@ import { AlertTriangle, RefreshCw } from "lucide-react";
 // Optional Sentry import - gracefully handle if not available
 let Sentry: any = null;
 try {
-  Sentry = require("@sentry/nextjs");
+  // Only try to import if the package is available
+  if (typeof require !== "undefined") {
+    Sentry = require("@sentry/nextjs");
+  }
 } catch (error) {
-  console.warn("Sentry not available:", error);
+  // Silently handle missing Sentry - it's optional
 }
 
 interface ErrorBoundaryState {

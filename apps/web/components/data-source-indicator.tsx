@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "../lib/api";
 import { Badge } from "@workspace/ui/components/badge";
 import { Database, FileText } from "lucide-react";
@@ -13,18 +13,16 @@ interface DataSourceInfo {
 }
 
 export function DataSourceIndicator() {
-  const { data: dataSourceInfo, isLoading } = useQuery(
-    ["data-source"],
-    async () => {
+  const { data: dataSourceInfo, isLoading } = useQuery({
+    queryKey: ["data-source"],
+    queryFn: async () => {
       const response = await api.getDataSourceInfo();
       return response.data as DataSourceInfo;
     },
-    {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
-      refetchOnWindowFocus: false,
-    }
-  );
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime)
+    refetchOnWindowFocus: false,
+  });
 
   if (isLoading) {
     return (

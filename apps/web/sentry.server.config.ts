@@ -1,9 +1,11 @@
 // Optional Sentry import
 let Sentry: any = null;
 try {
-  Sentry = require("@sentry/nextjs");
+  if (typeof require !== "undefined") {
+    Sentry = require("@sentry/nextjs");
+  }
 } catch (error) {
-  console.warn("Sentry not available:", error);
+  // Silently handle missing Sentry - it's optional
 }
 
 if (Sentry) {
@@ -20,7 +22,7 @@ if (Sentry) {
     captureUnhandledRejections: true,
 
     // Set server context
-    beforeSend(event, hint) {
+    beforeSend(event: any, hint: any) {
       // Add custom context
       event.tags = {
         ...event.tags,

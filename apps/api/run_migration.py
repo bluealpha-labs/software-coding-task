@@ -23,7 +23,7 @@ def run_migration():
         cursor = conn.cursor()
         
         print("📄 Reading migration file...")
-        migration_file = Path(__file__).parent / "migrations" / "001_create_users_table.sql"
+        migration_file = Path(__file__).parent.parent.parent / "migrations" / "001_create_users_table.sql"
         
         with open(migration_file, 'r') as f:
             migration_sql = f.read()

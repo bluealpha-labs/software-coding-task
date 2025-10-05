@@ -1,7 +1,7 @@
 /**
  * React Query hooks for dashboard data with memoization and caching
  */
-import { useQuery, UseQueryResult } from "react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
   api,
   SummaryMetrics,
@@ -21,91 +21,85 @@ export const queryKeys = {
 
 // Summary metrics hook
 export function useSummaryMetrics(): UseQueryResult<SummaryMetrics, Error> {
-  return useQuery(
-    queryKeys.summaryMetrics,
-    async () => {
+  return useQuery({
+    queryKey: queryKeys.summaryMetrics,
+    queryFn: async () => {
       const response = await api.getSummaryMetrics();
       return response.data;
     },
-    {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
-      refetchOnWindowFocus: false,
-      retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    }
-  );
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime)
+    refetchOnWindowFocus: false,
+    retry: 3,
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
 }
 
 // Contribution data hook
 export function useContributionData(): UseQueryResult<ContributionData, Error> {
-  return useQuery(
-    queryKeys.contributionData,
-    async () => {
+  return useQuery({
+    queryKey: queryKeys.contributionData,
+    queryFn: async () => {
       const response = await api.getContributionData();
       return response.data;
     },
-    {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
-      refetchOnWindowFocus: false,
-      retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    }
-  );
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime)
+    refetchOnWindowFocus: false,
+    retry: 3,
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
 }
 
 // Response curves hook
 export function useResponseCurves(): UseQueryResult<ResponseCurvesData, Error> {
-  return useQuery(
-    queryKeys.responseCurves,
-    async () => {
+  return useQuery({
+    queryKey: queryKeys.responseCurves,
+    queryFn: async () => {
       const response = await api.getResponseCurves();
       return response.data;
     },
-    {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
-      refetchOnWindowFocus: false,
-      retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    }
-  );
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime)
+    refetchOnWindowFocus: false,
+    retry: 3,
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
 }
 
 // AI insights hook
 export function useAIInsights(): UseQueryResult<AIInsights, Error> {
-  return useQuery(
-    queryKeys.aiInsights,
-    async () => {
+  return useQuery({
+    queryKey: queryKeys.aiInsights,
+    queryFn: async () => {
       const response = await api.getAIInsights();
       return response.data;
     },
-    {
-      staleTime: 10 * 60 * 1000, // 10 minutes (AI insights change less frequently)
-      cacheTime: 30 * 60 * 1000, // 30 minutes
-      refetchOnWindowFocus: false,
-      retry: 2,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    }
-  );
+    staleTime: 10 * 60 * 1000, // 10 minutes (AI insights change less frequently)
+    gcTime: 30 * 60 * 1000, // 30 minutes (renamed from cacheTime)
+    refetchOnWindowFocus: false,
+    retry: 2,
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
 }
 
 // Cache stats hook
 export function useCacheStats(): UseQueryResult<any, Error> {
-  return useQuery(
-    queryKeys.cacheStats,
-    async () => {
+  return useQuery({
+    queryKey: queryKeys.cacheStats,
+    queryFn: async () => {
       const response = await api.getCacheStats();
       return response.data;
     },
-    {
-      staleTime: 30 * 1000, // 30 seconds
-      cacheTime: 2 * 60 * 1000, // 2 minutes
-      refetchInterval: 30 * 1000, // Refetch every 30 seconds
-      refetchOnWindowFocus: true,
-    }
-  );
+    staleTime: 30 * 1000, // 30 seconds
+    gcTime: 2 * 60 * 1000, // 2 minutes (renamed from cacheTime)
+    refetchInterval: 30 * 1000, // Refetch every 30 seconds
+    refetchOnWindowFocus: true,
+  });
 }
 
 // Combined dashboard data hook

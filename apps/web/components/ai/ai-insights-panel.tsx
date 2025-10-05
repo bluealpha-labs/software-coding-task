@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -10,6 +11,9 @@ import {
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { useAIInsights } from "../../hooks/useDashboardData";
+import { useAIContext, DashboardContext } from "../../hooks/useAIContext";
+import { AIChatInterface } from "./ai-chat-interface";
+import { RecommendationImplementer } from "./recommendation-implementer";
 import {
   Brain,
   TrendingUp,
@@ -19,8 +23,11 @@ import {
   CheckCircle,
   XCircle,
   Info,
+  MessageSquare,
+  Play,
+  Target,
 } from "lucide-react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@workspace/ui/lib/utils";
 
 interface AIInsights {
@@ -32,10 +39,34 @@ interface AIInsights {
 
 export function AIInsightsPanel() {
   const { data: insights, isLoading, isError } = useAIInsights();
+  const { context, addInteraction, getContextualInsights } = useAIContext();
   const queryClient = useQueryClient();
+  const [showChat, setShowChat] = useState(false);
+  const [showImplementer, setShowImplementer] = useState(false);
+  const [selectedRecommendation, setSelectedRecommendation] =
+    useState<string>("");
 
   const handleRefresh = () => {
-    queryClient.invalidateQueries(["dashboard", "ai-insights"]);
+    queryClient.invalidateQueries({ queryKey: ["dashboard", "ai-insights"] });
+  };
+
+  const handleImplementRecommendation = (recommendation: string) => {
+    setSelectedRecommendation(recommendation);
+    setShowImplementer(true);
+    addInteraction({
+      type: "chart_click",
+      data: { action: "implement_recommendation", recommendation },
+      context: "AI Insights Panel",
+    });
+  };
+
+  const handleChatToggle = () => {
+    setShowChat(!showChat);
+    addInteraction({
+      type: "chart_click",
+      data: { action: "toggle_chat" },
+      context: "AI Insights Panel",
+    });
   };
 
   if (isLoading) {
@@ -131,7 +162,7 @@ export function AIInsightsPanel() {
 
   const confidenceVariant = getConfidenceVariant(insights.confidence_score);
 
-  return (
+  const renderMainPanel = () => (
     <Card className="w-full">
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -147,18 +178,29 @@ export function AIInsightsPanel() {
               </Badge>
             </CardDescription>
           </div>
-          <Button
-            onClick={handleRefresh}
-            variant="outline"
-            size="sm"
-            disabled={isLoading}
-            className="self-start sm:self-center"
-          >
-            <RefreshCw
-              className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
-            />
-            <span className="sr-only">Refresh insights</span>
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleChatToggle}
+              variant="outline"
+              size="sm"
+              className="self-start sm:self-center"
+            >
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Chat with AI
+            </Button>
+            <Button
+              onClick={handleRefresh}
+              variant="outline"
+              size="sm"
+              disabled={isLoading}
+              className="self-start sm:self-center"
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+              />
+              <span className="sr-only">Refresh insights</span>
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-8">
@@ -181,9 +223,41 @@ export function AIInsightsPanel() {
                   className="flex items-start gap-3 p-4 rounded-lg border border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20"
                 >
                   <CheckCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-foreground leading-relaxed">
-                    {rec}
-                  </p>
+                  <div className="flex-1">
+                    <p className="text-sm text-foreground leading-relaxed mb-2">
+                      {rec}
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleImplementRecommendation(rec)}
+                        className="text-xs"
+                      >
+                        <Play className="h-3 w-3 mr-1" />
+                        Implement
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setShowChat(true);
+                          addInteraction({
+                            type: "chart_click",
+                            data: {
+                              action: "ask_about_recommendation",
+                              recommendation: rec,
+                            },
+                            context: "AI Insights Panel",
+                          });
+                        }}
+                        className="text-xs"
+                      >
+                        <MessageSquare className="h-3 w-3 mr-1" />
+                        Ask AI
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -267,5 +341,48 @@ export function AIInsightsPanel() {
           )}
       </CardContent>
     </Card>
+  );
+
+  return (
+    <div className="space-y-6">
+      {/* Main AI Insights Panel */}
+      {renderMainPanel()}
+
+      {/* AI Chat Interface */}
+      {showChat && (
+        <AIChatInterface
+          dashboardContext={{
+            currentView: "insights" as const,
+            selectedChart: "ai-insights",
+            dataSnapshot: context.dataSnapshot,
+            userInteractions: context.userInteractions,
+          }}
+          onImplementRecommendation={handleImplementRecommendation}
+          onExplainChart={(chartType, data) => {
+            addInteraction({
+              type: "chart_click",
+              data: { action: "explain_chart", chartType, data },
+              context: "AI Chat Interface",
+            });
+          }}
+        />
+      )}
+
+      {/* Recommendation Implementer */}
+      {showImplementer && selectedRecommendation && (
+        <RecommendationImplementer
+          recommendation={selectedRecommendation}
+          onImplementationComplete={(plan) => {
+            console.log("Implementation completed:", plan);
+            setShowImplementer(false);
+            setSelectedRecommendation("");
+          }}
+          onCancel={() => {
+            setShowImplementer(false);
+            setSelectedRecommendation("");
+          }}
+        />
+      )}
+    </div>
   );
 }

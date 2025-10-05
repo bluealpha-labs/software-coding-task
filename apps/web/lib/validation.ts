@@ -210,13 +210,13 @@ export function useValidation<T extends Record<string, any>>(
       if (result.errors[field as string]) {
         setErrors((prev) => ({
           ...prev,
-          [field]: result.errors[field as string],
+          [field]: result.errors[field as string] || "",
         }));
       } else {
         setErrors((prev) => {
           const newErrors = { ...prev };
           delete newErrors[field as string];
-          return newErrors;
+          return newErrors as Record<string, string>;
         });
       }
     },
@@ -249,31 +249,78 @@ export function useValidation<T extends Record<string, any>>(
 import React from "react";
 
 // Simple validation functions for common use cases
-export function validateEmail(email: string): string | null {
-  if (!email) return "Email is required";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return "Please enter a valid email address";
+export function validateEmail(email: string): {
+  isValid: boolean;
+  errors: string[];
+} {
+  const errors: string[] = [];
+  if (!email) {
+    errors.push("Email is required");
+  } else {
+    if (email.length > 255) {
+      errors.push("Email must be less than 255 characters");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.push("Please enter a valid email address");
+    }
   }
-  return null;
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
 }
 
-export function validatePassword(password: string): string | null {
-  if (!password) return "Password is required";
-  if (password.length < 8) return "Password must be at least 8 characters";
-  if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-    return "Password must contain at least one uppercase letter, one lowercase letter, and one number";
+export function validatePassword(password: string): {
+  isValid: boolean;
+  errors: string[];
+} {
+  const errors: string[] = [];
+  if (!password) {
+    errors.push("Password is required");
+  } else {
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters long");
+    }
+    if (password.length > 128) {
+      errors.push("Password must be less than 128 characters");
+    }
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+      errors.push(
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+      );
+    }
   }
-  return null;
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
 }
 
 export function validateRequired(
   value: string,
   fieldName: string = "Field"
-): string | null {
+): { isValid: boolean; errors: string[] } {
+  const errors: string[] = [];
   if (!value || value.trim() === "") {
-    return `${fieldName} is required`;
+    errors.push(`${fieldName} is required`);
   }
-  return null;
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
+}
+
+export function validateFullName(name: string): {
+  isValid: boolean;
+  errors: string[];
+} {
+  const errors: string[] = [];
+  if (name && name.length > 255) {
+    errors.push("Full name must be less than 255 characters");
+  }
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
 }
 
 export function validateMinLength(
@@ -301,30 +348,36 @@ export function validateMaxLength(
 // Form validation function
 export function validateForm(data: Record<string, any>): {
   isValid: boolean;
-  errors: Record<string, string>;
+  errors: string[];
 } {
-  const errors: Record<string, string> = {};
+  const allErrors: string[] = [];
 
   // Validate email
   if (data.email) {
-    const emailError = validateEmail(data.email);
-    if (emailError) errors.email = emailError;
+    const emailResult = validateEmail(data.email);
+    if (!emailResult.isValid) {
+      allErrors.push(...emailResult.errors);
+    }
   }
 
   // Validate password
   if (data.password) {
-    const passwordError = validatePassword(data.password);
-    if (passwordError) errors.password = passwordError;
+    const passwordResult = validatePassword(data.password);
+    if (!passwordResult.isValid) {
+      allErrors.push(...passwordResult.errors);
+    }
   }
 
-  // Validate full name
-  if (data.fullName) {
-    const nameError = validateRequired(data.fullName, "Full name");
-    if (nameError) errors.fullName = nameError;
+  // Validate full name (optional)
+  if (data.fullName && data.fullName.trim()) {
+    const nameResult = validateFullName(data.fullName);
+    if (!nameResult.isValid) {
+      allErrors.push(...nameResult.errors);
+    }
   }
 
   return {
-    isValid: Object.keys(errors).length === 0,
-    errors,
+    isValid: allErrors.length === 0,
+    errors: allErrors,
   };
 }

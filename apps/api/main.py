@@ -5,7 +5,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from api.config import get_settings
-from api.routers import auth, dashboard
+from api.routers import auth, dashboard, mmm, mmm_dev
 from api.logging_config import setup_logging, get_logger
 from api.constants import API_TITLE, API_VERSION, ALLOWED_ORIGINS
 from api.services.migration_service import migration_service
@@ -90,6 +90,8 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router)
 app.include_router(dashboard.router)
+app.include_router(mmm.router)
+app.include_router(mmm_dev.router)
 
 @app.get("/health")
 async def health():
@@ -142,10 +144,15 @@ async def health():
 async def root():
     return {"message": API_TITLE, "version": API_VERSION}
 
-# Startup event - run migrations
+@app.get("/healthz")
+async def health_check():
+    """Health check endpoint for load balancers and monitoring"""
+    return {"status": "healthy", "timestamp": time.time()}
+
+# Startup event - run migrations and load model
 @app.on_event("startup")
 async def startup_event():
-    """Run database migrations on startup."""
+    """Run database migrations and load Meridian model on startup."""
     logger.info("Starting up MMM Dashboard API...")
     
     try:
@@ -167,6 +174,42 @@ async def startup_event():
         logger.error(f"Failed to run migrations: {e}")
         # Don't fail startup for migration errors in development
         # In production, you might want to fail fast
+    
+    # Load Meridian model
+    try:
+        logger.info("Loading Meridian model...")
+        from api.meridian_adapter import load_model
+        import os
+        
+        # Try multiple possible locations for the model file
+        # Priority: local API directory first, then fallback locations
+        possible_paths = [
+            os.path.join(os.path.dirname(__file__), 'saved_mmm.pkl'),  # Local API directory
+            'saved_mmm.pkl',  # Current working directory
+            os.path.join(os.path.dirname(__file__), '../../saved_mmm.pkl'),
+            os.path.join(os.path.dirname(__file__), '../../../saved_mmm.pkl'),
+        ]
+        
+        model_path = None
+        for path in possible_paths:
+            if os.path.exists(path):
+                model_path = path
+                break
+        
+        if model_path:
+            model_adapter = load_model(model_path)
+            if model_adapter and model_adapter.model:
+                logger.info(f"Successfully loaded Meridian model from {model_path}")
+                logger.info(f"Model has {len(model_adapter.channels)} channels: {model_adapter.channels}")
+            else:
+                logger.warning("Model file found but could not be loaded properly")
+        else:
+            logger.warning(f"Meridian model file not found in any of these locations: {possible_paths}")
+            logger.info("API will use mock data for development")
+            
+    except Exception as e:
+        logger.error(f"Failed to load Meridian model: {e}")
+        logger.info("API will use mock data for development")
 
 # Shutdown event - cleanup resources
 @app.on_event("shutdown")

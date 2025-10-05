@@ -20,7 +20,8 @@ class DataService:
         try:
             # Try multiple possible locations for the pkl file
             possible_paths = [
-                'saved_mmm.pkl',  # Current directory (project root)
+                os.path.join(os.path.dirname(__file__), 'saved_mmm.pkl'),  # Local API directory
+                'saved_mmm.pkl',  # Current directory
                 os.path.join(os.path.dirname(__file__), '../../saved_mmm.pkl'),
                 os.path.join(os.path.dirname(__file__), '../../../saved_mmm.pkl'),
             ]

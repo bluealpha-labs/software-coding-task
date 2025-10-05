@@ -6,7 +6,42 @@ A comprehensive Marketing Mix Modeling (MMM) dashboard platform with user
 authentication, analytics, and modern development practices. Built with FastAPI
 backend and Next.js frontend in a monorepo structure.
 
+## 🚀 Quick Start
+
+1. **Install dependencies**:
+
+   ```bash
+   pnpm install
+   ```
+
+2. **Model data**: The real Meridian model data is already available in
+   `apps/api/saved_mmm.pkl`
+   - This contains the actual interview data from Google Meridian
+   - If you need to create additional sample data:
+     `cd apps/api && pnpm run create-sample-model`
+
+3. **Start the development servers**:
+
+   ```bash
+   pnpm dev
+   ```
+
+4. **Access the applications**:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - API Documentation: http://localhost:8000/docs
+
 ## ✅ Implemented Features
+
+### 🧠 Google Meridian MMM Integration
+
+- **Meridian Model Loading** from saved_mmm.pkl with automatic fallback to mock
+  data
+- **Channel Contribution Analysis** with real-time data from Meridian model
+- **Response Curves Visualization** showing diminishing returns per channel
+- **AI-Powered Explanations** with context-aware insights and drill-down
+  suggestions
+- **Model Health Monitoring** with comprehensive status checks
 
 ### 🔐 Authentication & Authorization
 
@@ -37,8 +72,11 @@ backend and Next.js frontend in a monorepo structure.
 
 ### 📊 Data & Analytics
 
-- **Dashboard with charts** (contribution, response curves)
-- **Cached API calls** for performance
+- **Dual Dashboard System** with legacy dashboard and new Meridian MMM dashboard
+- **Real-time Model Data** from Google Meridian MMM with automatic fallback
+- **Advanced Chart Visualizations** with Recharts integration
+- **AI-Powered Insights** with contextual explanations and recommendations
+- **Cached API calls** for performance optimization
 - **Drill-down views** for detailed analysis
 - **Usage analytics** with event logging
 
@@ -142,8 +180,7 @@ pnpm turbo run typecheck
 
 ```bash
 # Run migrations manually
-cd apps/api
-python run_migration.py
+cd apps/api && uv run python run_migration.py
 
 # Access database UI
 open http://localhost:8080
@@ -224,7 +261,20 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 ## 📊 Features
 
-### Dashboard Analytics
+### Meridian MMM Dashboard
+
+- **Model Integration**: Automatic loading of saved_mmm.pkl with fallback to
+  mock data
+- **Channel Contributions**: Real-time analysis of channel performance from
+  Meridian model
+- **Response Curves**: Interactive visualization of diminishing returns per
+  channel
+- **AI Explanations**: Context-aware insights with drill-down suggestions and
+  caveats
+- **Channel Selection**: Dynamic switching between different marketing channels
+- **Performance Metrics**: Efficiency, ROI, and saturation point analysis
+
+### Legacy Dashboard Analytics
 
 - **Summary Metrics**: Total spend, contribution, ROI
 - **Contribution Charts**: Channel performance analysis
