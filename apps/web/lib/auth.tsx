@@ -50,29 +50,63 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(response.data);
     } catch (error) {
       console.error("Auth check failed:", error);
-      Cookies.remove("token");
+      // Clear invalid token
+      Cookies.remove("token", { path: "/" });
     } finally {
       setLoading(false);
     }
   };
 
   const login = async (email: string, password: string) => {
-    const formData = new FormData();
-    formData.append("username", email);
-    formData.append("password", password);
+    try {
+      const formData = new FormData();
+      formData.append("username", email);
+      formData.append("password", password);
 
-    const response = await axios.post(`${API_URL}/auth/token`, formData, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    });
+      const response = await axios.post(`${API_URL}/auth/token`, formData, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
 
-    const { access_token } = response.data;
-    Cookies.set("token", access_token, { expires: 7 });
+      const { access_token } = response.data;
+      // Set secure cookie with httpOnly-like behavior
+      Cookies.set("token", access_token, {
+        expires: 7,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      });
 
-    // Get user info
-    const userResponse = await axios.get(`${API_URL}/auth/users/me`, {
-      headers: { Authorization: `Bearer ${access_token}` },
-    });
-    setUser(userResponse.data);
+      // Get user info
+      const userResponse = await axios.get(`${API_URL}/auth/users/me`, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+      setUser(userResponse.data);
+    } catch (error: any) {
+      console.error("Login failed:", error);
+
+      // Handle different types of errors
+      if (error.response) {
+        // Server responded with error status
+        const status = error.response.status;
+        const message = error.response.data?.detail || "Login failed";
+
+        if (status === 401) {
+          throw new Error("Invalid email or password");
+        } else if (status === 422) {
+          throw new Error("Invalid input data");
+        } else if (status >= 500) {
+          throw new Error("Server error. Please try again later.");
+        } else {
+          throw new Error(message);
+        }
+      } else if (error.request) {
+        // Network error
+        throw new Error("Network error. Please check your connection.");
+      } else {
+        // Other error
+        throw new Error("An unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   const register = async (
@@ -80,18 +114,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     fullName?: string
   ) => {
-    await axios.post(`${API_URL}/auth/register`, {
-      email,
-      password,
-      full_name: fullName,
-    });
+    try {
+      await axios.post(`${API_URL}/auth/register`, {
+        email,
+        password,
+        full_name: fullName,
+      });
 
-    // Auto-login after registration
-    await login(email, password);
+      // Auto-login after registration
+      await login(email, password);
+    } catch (error: any) {
+      console.error("Registration failed:", error);
+
+      // Handle different types of errors
+      if (error.response) {
+        const status = error.response.status;
+        const message = error.response.data?.detail || "Registration failed";
+
+        if (status === 400) {
+          if (message.includes("already registered")) {
+            throw new Error("Email is already registered");
+          } else {
+            throw new Error("Invalid registration data");
+          }
+        } else if (status === 422) {
+          throw new Error("Invalid input data. Please check your information.");
+        } else if (status >= 500) {
+          throw new Error("Server error. Please try again later.");
+        } else {
+          throw new Error(message);
+        }
+      } else if (error.request) {
+        throw new Error("Network error. Please check your connection.");
+      } else {
+        throw new Error("An unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   const logout = () => {
-    Cookies.remove("token");
+    Cookies.remove("token", { path: "/" });
     setUser(null);
   };
 

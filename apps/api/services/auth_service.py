@@ -5,12 +5,15 @@ from passlib.context import CryptContext
 from fastapi import HTTPException, status
 from api.models.user import User, UserInDB, UserCreate, TokenData
 from api.services.database_service import db_service
+from api.constants import SECRET_KEY_MIN_LENGTH, ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM
 import os
 
 # Security
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-here")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable is required")
+if len(SECRET_KEY) < SECRET_KEY_MIN_LENGTH:
+    raise ValueError(f"SECRET_KEY must be at least {SECRET_KEY_MIN_LENGTH} characters long")
 
 # Use bcrypt as originally intended
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

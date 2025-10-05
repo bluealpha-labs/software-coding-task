@@ -4,6 +4,10 @@ import pandas as pd
 import numpy as np
 from typing import Dict, List, Any
 from api.models.dashboard import SummaryMetrics, ContributionData, ResponseCurvesData
+from api.logging_config import get_logger
+from api.services.cache_service import cache_service
+
+logger = get_logger(__name__)
 
 class DataService:
     def __init__(self):
@@ -28,25 +32,25 @@ class DataService:
                     break
             
             if not pkl_path:
-                print("PKL file not found in any of these locations:", possible_paths)
-                print("Using mock data for development")
+                logger.warning(f"PKL file not found in any of these locations: {possible_paths}")
+                logger.info("Using mock data for development")
                 self.create_mock_data()
                 return
             
             with open(pkl_path, 'rb') as f:
                 self.model = pickle.load(f)
-            print(f"Successfully loaded model from {pkl_path}")
+            logger.info(f"Successfully loaded model from {pkl_path}")
             
         except Exception as e:
-            print(f"Error loading model: {e}")
-            print("Note: This is likely due to a version mismatch with the meridian package.")
-            print("The pkl file was created with a different version of meridian.")
-            print("Using mock data for development - the application will work perfectly!")
+            logger.error(f"Error loading model: {e}")
+            logger.warning("Note: This is likely due to a version mismatch with the meridian package.")
+            logger.warning("The pkl file was created with a different version of meridian.")
+            logger.info("Using mock data for development - the application will work perfectly!")
             self.create_mock_data()
     
     def create_mock_data(self):
         """Create mock data for development"""
-        print("Creating mock data for development")
+        logger.info("Creating mock data for development")
         
         # Mock channels
         channels = ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
@@ -93,18 +97,30 @@ class DataService:
     
     def get_summary_metrics(self) -> SummaryMetrics:
         """Get summary metrics for the dashboard"""
+        cache_key = "summary_metrics"
+        
+        # Try to get from cache first
+        cached_data = cache_service.get(cache_key)
+        if cached_data:
+            logger.info("Returning summary metrics from cache")
+            return SummaryMetrics(**cached_data)
+        
         if self.mock_data:
             total_spend = sum(self.mock_data['spend'])
             total_contribution = sum(self.mock_data['contribution'])
             roi = (total_contribution - total_spend) / total_spend * 100 if total_spend > 0 else 0
             
-            return SummaryMetrics(
+            metrics = SummaryMetrics(
                 total_spend=total_spend,
                 total_contribution=total_contribution,
                 roi=roi,
                 top_channel=self.mock_data['channels'][np.argmax(self.mock_data['contribution'])],
                 total_channels=len(self.mock_data['channels'])
             )
+            
+            # Cache the result for 1 hour
+            cache_service.set(cache_key, metrics.dict(), expire=3600)
+            return metrics
         
         # Fallback if no data
         return SummaryMetrics(
@@ -117,22 +133,46 @@ class DataService:
     
     def get_contribution_data(self) -> ContributionData:
         """Get contribution chart data"""
+        cache_key = "contribution_data"
+        
+        # Try to get from cache first
+        cached_data = cache_service.get(cache_key)
+        if cached_data:
+            logger.info("Returning contribution data from cache")
+            return ContributionData(**cached_data)
+        
         if self.mock_data:
-            return ContributionData(
+            data = ContributionData(
                 channels=self.mock_data['channels'],
                 spend=self.mock_data['spend'],
                 contribution=self.mock_data['contribution']
             )
+            
+            # Cache the result for 1 hour
+            cache_service.set(cache_key, data.dict(), expire=3600)
+            return data
         
         return ContributionData(channels=[], spend=[], contribution=[])
     
     def get_response_curves_data(self) -> ResponseCurvesData:
         """Get response curves data"""
+        cache_key = "response_curves_data"
+        
+        # Try to get from cache first
+        cached_data = cache_service.get(cache_key)
+        if cached_data:
+            logger.info("Returning response curves data from cache")
+            return ResponseCurvesData(**cached_data)
+        
         if self.mock_data:
-            return ResponseCurvesData(
+            data = ResponseCurvesData(
                 channels=list(self.mock_data['response_curves'].keys()),
                 curves=self.mock_data['response_curves']
             )
+            
+            # Cache the result for 1 hour
+            cache_service.set(cache_key, data.dict(), expire=3600)
+            return data
         
         return ResponseCurvesData(channels=[], curves={})
 

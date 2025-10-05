@@ -12,23 +12,45 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card";
 import { useAuth } from "../../lib/auth";
+import { validateEmail, validatePassword } from "../../lib/validation";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState<{
+    [key: string]: string[];
+  }>({});
   const { login } = useAuth();
+
+  const validateForm = () => {
+    const emailResult = validateEmail(email);
+    const passwordResult = validatePassword(password);
+
+    const errors: { [key: string]: string[] } = {};
+    if (!emailResult.isValid) errors.email = emailResult.errors;
+    if (!passwordResult.isValid) errors.password = passwordResult.errors;
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
+    setValidationErrors({});
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
 
     try {
       await login(email, password);
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Login failed");
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -53,7 +75,15 @@ export function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
+              className={validationErrors.email ? "border-red-500" : ""}
             />
+            {validationErrors.email && (
+              <div className="text-red-500 text-sm">
+                {validationErrors.email.map((error, index) => (
+                  <div key={index}>{error}</div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
@@ -64,7 +94,15 @@ export function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
+              className={validationErrors.password ? "border-red-500" : ""}
             />
+            {validationErrors.password && (
+              <div className="text-red-500 text-sm">
+                {validationErrors.password.map((error, index) => (
+                  <div key={index}>{error}</div>
+                ))}
+              </div>
+            )}
           </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <Button type="submit" className="w-full" disabled={loading}>

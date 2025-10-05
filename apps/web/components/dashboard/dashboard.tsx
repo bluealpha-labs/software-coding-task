@@ -50,12 +50,16 @@ export function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const token =
-        localStorage.getItem("token") ||
-        document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("token="))
-          ?.split("=")[1];
+      // Use consistent token retrieval from cookies
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+
+      if (!token) {
+        console.error("No authentication token found");
+        return;
+      }
 
       const headers = { Authorization: `Bearer ${token}` };
 

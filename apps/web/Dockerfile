@@ -13,7 +13,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm add -g turbo
 
 COPY . .
-RUN turbo prune @bluealpha/platform-app --docker
+RUN turbo prune web --docker
 
 # Stage 3: Installer
 FROM base AS installer
@@ -35,14 +35,13 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 FROM installer AS builder
 WORKDIR /app
 
-ARG NEXT_PUBLIC_PLATFORM_API_URL
-ENV NEXT_PUBLIC_PLATFORM_API_URL=$NEXT_PUBLIC_PLATFORM_API_URL
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 COPY --from=pruner /app/out/full/ .
-COPY sst-env.d.ts .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN --mount=type=cache,id=turbo,target=.turbo \
-    pnpm turbo run build --filter=@bluealpha/platform-app...
+    pnpm turbo run build --filter=web...
 
 # Stage 5: Production Runtime
 FROM gcr.io/distroless/nodejs22-debian12:nonroot AS runner
@@ -54,8 +53,8 @@ ENV HOSTNAME="0.0.0.0"
 ENV PORT=3000
 ENV NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder --chown=nonroot:nonroot /app/apps/platform-app/.next/standalone ./
-COPY --from=builder --chown=nonroot:nonroot /app/apps/platform-app/.next/static ./apps/platform-app/.next/static
+COPY --from=builder --chown=nonroot:nonroot /app/apps/web/.next/standalone ./
+COPY --from=builder --chown=nonroot:nonroot /app/apps/web/.next/static ./apps/web/.next/static
 
 EXPOSE 3000
-CMD ["apps/platform-app/server.js"]
+CMD ["apps/web/server.js"]

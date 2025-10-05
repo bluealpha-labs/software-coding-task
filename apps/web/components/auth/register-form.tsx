@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card";
 import { useAuth } from "../../lib/auth";
+import { validateForm } from "../../lib/validation";
 
 export function RegisterForm() {
   const [email, setEmail] = useState("");
@@ -19,17 +20,26 @@ export function RegisterForm() {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
+    setValidationErrors([]);
+
+    const validationResult = validateForm({ email, password, fullName });
+    if (!validationResult.isValid) {
+      setValidationErrors(validationResult.errors);
+      return;
+    }
+
+    setLoading(true);
 
     try {
       await register(email, password, fullName || undefined);
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Registration failed");
+      setError(err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -75,6 +85,13 @@ export function RegisterForm() {
               placeholder="Enter your password"
             />
           </div>
+          {validationErrors.length > 0 && (
+            <div className="text-red-500 text-sm">
+              {validationErrors.map((error, index) => (
+                <div key={index}>{error}</div>
+              ))}
+            </div>
+          )}
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Creating account..." : "Create Account"}

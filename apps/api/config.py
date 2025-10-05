@@ -16,7 +16,7 @@ class Settings(BaseSettings):
         return f"postgresql+psycopg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     model_config = {
-        "env_file": "../../.env.local",
+        "env_file": ".env",
         "extra": "ignore"
     }
 
