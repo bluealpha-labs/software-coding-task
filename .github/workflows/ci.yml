@@ -69,11 +69,15 @@ jobs:
             - name: Install dependencies
               run: pnpm install --no-frozen-lockfile
 
+            - name: Install uv
+              run: |
+                  curl -LsSf https://astral.sh/uv/install.sh | sh
+                  echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
             - name: Install Python dependencies
               run: |
                   cd apps/api
-                  pip install --upgrade pip
-                  pip install -e ".[test]"
+                  uv sync
 
             - name: Run database migrations
               run: |
@@ -89,7 +93,7 @@ jobs:
             - name: Run API tests
               run: |
                   cd apps/api
-                  pytest tests/ -v --cov=api --cov-report=xml
+                  uv run pytest tests/ -v --cov=api --cov-report=xml
               env:
                   POSTGRES_HOST: localhost
                   POSTGRES_PORT: 5432
