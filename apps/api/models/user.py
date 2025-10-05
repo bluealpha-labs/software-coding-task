@@ -12,6 +12,15 @@ class UserRole(str, Enum):
 class UserBase(BaseModel):
     email: EmailStr
     full_name: Optional[str] = None
+    
+    @validator('email')
+    def validate_email(cls, v):
+        if not v:
+            raise ValueError('Email is required')
+        # EmailStr already validates format, but we can add additional checks
+        if len(v) > 255:
+            raise ValueError('Email must be less than 255 characters')
+        return v.lower().strip()
 
 class UserCreate(UserBase):
     password: str

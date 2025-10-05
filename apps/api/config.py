@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     
     # Application
     DEBUG: bool = Field(default=False, description="Debug mode")
-    SECRET_KEY: str = Field(default="your-secret-key-here", description="JWT secret key")
+    SECRET_KEY: str = Field(..., min_length=32, description="JWT secret key")
     
     # Redis
     REDIS_HOST: str = Field(default="localhost", description="Redis host")

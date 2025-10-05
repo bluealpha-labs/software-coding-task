@@ -10,6 +10,7 @@ from api.logging_config import setup_logging, get_logger
 from api.constants import API_TITLE, API_VERSION, ALLOWED_ORIGINS
 from api.services.migration_service import migration_service
 import logging
+import time
 
 # Setup logging
 setup_logging()
@@ -41,6 +42,20 @@ async def global_exception_handler(request, exc):
         status_code=500,
         content={"detail": "Internal server error"}
     )
+
+# Performance monitoring middleware
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(round(process_time, 4))
+    
+    # Log slow requests
+    if process_time > 1.0:  # Log requests taking more than 1 second
+        logger.warning(f"Slow request: {request.method} {request.url.path} took {process_time:.3f}s")
+    
+    return response
 
 # CORS middleware
 app.add_middleware(

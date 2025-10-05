@@ -15,7 +15,8 @@ class CacheService:
         self.redis_client = None
         self._cache = {}  # In-memory fallback cache
         self._cache_lock = threading.RLock()  # Thread-safe lock for in-memory cache
-        self._max_cache_size = 1000  # Maximum number of items in memory cache
+        from api.constants import CACHE_MAX_SIZE
+        self._max_cache_size = CACHE_MAX_SIZE  # Maximum number of items in memory cache
         
         # Cache statistics
         self._stats = {

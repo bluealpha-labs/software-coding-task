@@ -20,6 +20,7 @@ RATE_LIMIT_BURST = 10
 CACHE_TTL_DEFAULT = 300  # 5 minutes
 CACHE_TTL_SHORT = 60    # 1 minute
 CACHE_TTL_LONG = 3600   # 1 hour
+CACHE_MAX_SIZE = 1000   # Maximum items in memory cache
 
 # Database Pool Configuration
 DB_POOL_MIN_CONNECTIONS = 1

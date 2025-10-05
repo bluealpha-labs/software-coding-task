@@ -1,16 +1,17 @@
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 from functools import wraps
 from api.models.user import UserRole
+from api.services.database_service import db_service
+from api.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class RBACService:
     """Role-Based Access Control service."""
     
     def __init__(self):
-        # In-memory role storage (in production, this would be in database)
-        self.user_roles: Dict[str, UserRole] = {
-            "admin@example.com": UserRole.ADMIN,
-            "test@example.com": UserRole.USER,
-        }
+        # Database-backed role storage
+        pass
         
         # Permission matrix
         self.permissions = {
@@ -30,12 +31,43 @@ class RBACService:
         }
     
     def get_user_role(self, email: str) -> UserRole:
-        """Get user role by email."""
-        return self.user_roles.get(email, UserRole.USER)
+        """Get user role by email from database."""
+        try:
+            conn = db_service.get_connection()
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "SELECT role FROM users WHERE email = %s",
+                    (email,)
+                )
+                result = cursor.fetchone()
+                if result:
+                    return UserRole(result[0]) if result[0] else UserRole.USER
+                return UserRole.USER
+        except Exception as e:
+            logger.error(f"Error getting user role for {email}: {e}")
+            return UserRole.USER
+        finally:
+            if 'conn' in locals():
+                db_service.return_connection(conn)
     
     def assign_role(self, email: str, role: UserRole) -> None:
-        """Assign role to user."""
-        self.user_roles[email] = role
+        """Assign role to user in database."""
+        try:
+            conn = db_service.get_connection()
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "UPDATE users SET role = %s WHERE email = %s",
+                    (role.value, email)
+                )
+                conn.commit()
+                logger.info(f"Assigned role {role.value} to user {email}")
+        except Exception as e:
+            logger.error(f"Error assigning role to {email}: {e}")
+            if 'conn' in locals():
+                conn.rollback()
+        finally:
+            if 'conn' in locals():
+                db_service.return_connection(conn)
     
     def check_access(self, email: str, permission: str) -> bool:
         """Check if user has permission."""

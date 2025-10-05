@@ -72,9 +72,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Set secure cookie with httpOnly-like behavior
       Cookies.set("token", access_token, {
         expires: 7,
-        secure: process.env.NODE_ENV === "production",
+        secure: true, // Always secure in production
         sameSite: "strict",
         path: "/",
+        httpOnly: false, // Note: js-cookie can't set httpOnly, this should be done server-side
       });
 
       // Get user info
