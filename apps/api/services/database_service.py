@@ -35,9 +35,31 @@ class DatabaseService:
         """Get database connection from pool"""
         try:
             conn = self.connection_pool.getconn()
-            # Test connection health
+            # Test connection health with comprehensive checks
             with conn.cursor() as cursor:
+                # Basic connectivity test
                 cursor.execute("SELECT 1")
+                
+                # Check database version and status
+                cursor.execute("SELECT version()")
+                version = cursor.fetchone()[0]
+                logger.debug(f"Database version: {version}")
+                
+                # Check if database is accepting connections
+                cursor.execute("SELECT pg_is_in_recovery()")
+                is_recovery = cursor.fetchone()[0]
+                if is_recovery:
+                    logger.warning("Database is in recovery mode")
+                
+                # Check active connections
+                cursor.execute("""
+                    SELECT count(*) as active_connections 
+                    FROM pg_stat_activity 
+                    WHERE state = 'active'
+                """)
+                active_connections = cursor.fetchone()[0]
+                logger.debug(f"Active database connections: {active_connections}")
+                
             return conn
         except Exception as e:
             logger.error(f"Failed to get connection from pool: {e}")
@@ -57,6 +79,52 @@ class DatabaseService:
             logger.info("Database connection pool closed")
         except Exception as e:
             logger.error(f"Error closing connection pool: {e}")
+    
+    def get_health_status(self) -> Dict[str, Any]:
+        """Get comprehensive database health status"""
+        health_status = {
+            "status": "healthy",
+            "pool_size": 0,
+            "active_connections": 0,
+            "database_version": None,
+            "is_recovery": False,
+            "errors": []
+        }
+        
+        try:
+            # Get pool information (psycopg2 doesn't expose used connections directly)
+            # We'll use a different approach to check pool health
+            health_status["pool_size"] = "unknown"  # psycopg2 doesn't expose this
+            
+            # Test connection and get database info
+            conn = self.get_connection()
+            try:
+                with conn.cursor() as cursor:
+                    # Get database version
+                    cursor.execute("SELECT version()")
+                    health_status["database_version"] = cursor.fetchone()[0]
+                    
+                    # Check if in recovery mode
+                    cursor.execute("SELECT pg_is_in_recovery()")
+                    health_status["is_recovery"] = cursor.fetchone()[0]
+                    
+                    # Get active connections
+                    cursor.execute("""
+                        SELECT count(*) as active_connections 
+                        FROM pg_stat_activity 
+                        WHERE state = 'active'
+                    """)
+                    health_status["active_connections"] = cursor.fetchone()[0]
+                    
+            finally:
+                self.return_connection(conn)
+                
+        except Exception as e:
+            health_status["status"] = "unhealthy"
+            health_status["errors"].append(str(e))
+            logger.error(f"Database health check failed: {e}")
+        
+        return health_status
     
     def get_user_by_email(self, email: str) -> Optional[Dict[str, Any]]:
         """Get user by email"""

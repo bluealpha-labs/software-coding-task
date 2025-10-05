@@ -4,6 +4,7 @@ import time
 import asyncio
 import threading
 from typing import Any, Optional, Callable, Awaitable, Dict
+from collections import OrderedDict
 import redis
 from api.config import get_settings
 
@@ -13,7 +14,7 @@ class CacheService:
     def __init__(self):
         self.settings = get_settings()
         self.redis_client = None
-        self._cache = {}  # In-memory fallback cache
+        self._cache = OrderedDict()  # LRU cache using OrderedDict
         self._cache_lock = threading.RLock()  # Thread-safe lock for in-memory cache
         from api.constants import CACHE_MAX_SIZE
         self._max_cache_size = CACHE_MAX_SIZE  # Maximum number of items in memory cache
@@ -65,14 +66,17 @@ class CacheService:
             self._set_in_memory(key, serialized_value, ttl)
     
     def _set_in_memory(self, key: str, value: str, ttl: int) -> None:
-        """Set value in thread-safe in-memory cache."""
+        """Set value in thread-safe LRU cache."""
         with self._cache_lock:
-            # Check cache size limit
-            if len(self._cache) >= self._max_cache_size:
-                # Remove oldest entries (simple LRU)
-                oldest_key = next(iter(self._cache))
-                del self._cache[oldest_key]
+            # Remove key if it exists to update its position
+            if key in self._cache:
+                del self._cache[key]
+            # Check cache size limit and remove least recently used
+            elif len(self._cache) >= self._max_cache_size:
+                # Remove least recently used item (first item in OrderedDict)
+                self._cache.popitem(last=False)
             
+            # Add/update the key (moves to end = most recently used)
             self._cache[key] = {
                 "value": value,
                 "expires": time.time() + ttl
@@ -98,13 +102,16 @@ class CacheService:
         return result
     
     def _get_from_memory(self, key: str) -> Optional[Any]:
-        """Get value from thread-safe in-memory cache."""
+        """Get value from thread-safe LRU cache."""
         with self._cache_lock:
             if key in self._cache:
                 cache_entry = self._cache[key]
                 if time.time() < cache_entry["expires"]:
+                    # Move to end (most recently used) for LRU
+                    self._cache.move_to_end(key)
                     return json.loads(cache_entry["value"])
                 else:
+                    # Expired, remove it
                     del self._cache[key]
             return None
     

@@ -11,6 +11,7 @@ from api.services.auth_service import (
 )
 from api.logging_config import get_logger
 from api.services.audit_service import audit_service
+from api.utils.security import sanitize_error_message
 
 logger = get_logger(__name__)
 
@@ -52,7 +53,8 @@ async def register(request: Request, user: UserCreate):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Unexpected error during registration: {e}")
+        sanitized_error = sanitize_error_message(str(e))
+        logger.error(f"Unexpected error during registration: {sanitized_error}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Registration failed"
@@ -100,13 +102,15 @@ async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends
     except HTTPException:
         raise
     except ValueError as e:
-        logger.error(f"Validation error during login: {e}")
+        sanitized_error = sanitize_error_message(str(e))
+        logger.error(f"Validation error during login: {sanitized_error}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid input data"
         )
     except Exception as e:
-        logger.error(f"Unexpected error during login: {e}")
+        sanitized_error = sanitize_error_message(str(e))
+        logger.error(f"Unexpected error during login: {sanitized_error}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Login failed"

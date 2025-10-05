@@ -43,6 +43,21 @@ async def global_exception_handler(request, exc):
         content={"detail": "Internal server error"}
     )
 
+# Security headers middleware
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    
+    # Security headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    
+    return response
+
 # Performance monitoring middleware
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
@@ -72,7 +87,50 @@ app.include_router(dashboard.router)
 
 @app.get("/health")
 async def health():
-    return {"status": "ok"}
+    """Comprehensive health check endpoint."""
+    from api.services.database_service import db_service
+    from api.services.cache_service import cache_service
+    
+    health_status = {
+        "status": "ok",
+        "timestamp": time.time(),
+        "services": {}
+    }
+    
+    # Database health check
+    try:
+        db_health = db_service.get_health_status()
+        health_status["services"]["database"] = db_health
+    except Exception as e:
+        health_status["services"]["database"] = {
+            "status": "unhealthy",
+            "error": str(e)
+        }
+    
+    # Cache health check
+    try:
+        cache_stats = cache_service.get_stats()
+        health_status["services"]["cache"] = {
+            "status": "healthy",
+            "redis_connected": cache_stats.get("redis_connected", False),
+            "hit_rate": cache_stats.get("hit_rate", 0)
+        }
+    except Exception as e:
+        health_status["services"]["cache"] = {
+            "status": "unhealthy",
+            "error": str(e)
+        }
+    
+    # Overall status
+    all_healthy = all(
+        service.get("status") == "healthy" 
+        for service in health_status["services"].values()
+    )
+    
+    if not all_healthy:
+        health_status["status"] = "degraded"
+    
+    return health_status
 
 @app.get("/")
 async def root():

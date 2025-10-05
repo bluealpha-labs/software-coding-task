@@ -8,14 +8,15 @@ from api.services.data_service import data_service
 from api.services.cache_service import cache_service, cache_key
 from api.constants import CACHE_TTL_DEFAULT
 from api.logging_config import get_logger
+from api.utils.rate_limiting import get_authenticated_user_rate_limit_key
 import time
 
 logger = get_logger(__name__)
 
 router = APIRouter(prefix="/api", tags=["dashboard"])
 
-# Initialize rate limiter for dashboard endpoints
-limiter = Limiter(key_func=get_remote_address)
+# Initialize rate limiter for dashboard endpoints with user-based limiting
+limiter = Limiter(key_func=get_authenticated_user_rate_limit_key)
 
 @router.get("/summary-metrics", response_model=SummaryMetrics, summary="Get summary metrics", description="Get overall marketing performance metrics including total spend, contribution, and ROI")
 @limiter.limit("30/minute")
