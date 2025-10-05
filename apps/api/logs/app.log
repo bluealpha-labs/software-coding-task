@@ -5209,3 +5209,521 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 17:46:01,481 - watchfiles.main - INFO - 3 changes detected
 2025-10-04 17:46:01,482 - api.main - INFO - All migrations completed successfully
 2025-10-04 17:46:01,482 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:53:17,267 - watchfiles.main - INFO - 2 changes detected
+2025-10-04 17:53:17,268 - uvicorn.error - WARNING - WatchFiles detected changes in 'middleware/validation.py'. Reloading...
+2025-10-04 17:53:17,339 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:53:17,444 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:53:17,447 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:53:17,449 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:53:17,450 - api.main - INFO - Database connection pool closed
+2025-10-04 17:53:17,452 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:53:17,454 - uvicorn.error - INFO - Finished server process [64262]
+2025-10-04 17:53:17,828 - watchfiles.main - INFO - 2 changes detected
+2025-10-04 17:53:17,829 - uvicorn.error - WARNING - WatchFiles detected changes in 'middleware/validation.py'. Reloading...
+2025-10-04 17:53:18,615 - uvicorn.error - INFO - Started server process [88493]
+2025-10-04 17:53:18,615 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:53:18,615 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:53:18,615 - api.main - INFO - Running database migrations...
+2025-10-04 17:53:18,626 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:53:18,626 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:53:20,667 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:53:20,668 - uvicorn.error - WARNING - WatchFiles detected changes in 'main.py'. Reloading...
+2025-10-04 17:53:20,744 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:53:20,846 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:53:20,846 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:53:20,847 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:53:20,847 - api.main - INFO - Database connection pool closed
+2025-10-04 17:53:20,847 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:53:20,847 - uvicorn.error - INFO - Finished server process [88493]
+2025-10-04 17:53:21,264 - watchfiles.main - INFO - 4 changes detected
+2025-10-04 17:53:21,442 - uvicorn.error - INFO - Started server process [88709]
+2025-10-04 17:53:21,442 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:53:21,443 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:53:21,443 - api.main - INFO - Running database migrations...
+2025-10-04 17:53:21,451 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:53:21,451 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:53:21,628 - watchfiles.main - INFO - 4 changes detected
+2025-10-04 17:53:28,701 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:53:28,701 - uvicorn.error - WARNING - WatchFiles detected changes in 'main.py'. Reloading...
+2025-10-04 17:53:28,721 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:53:28,824 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:53:28,825 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:53:28,825 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:53:28,825 - api.main - INFO - Database connection pool closed
+2025-10-04 17:53:28,825 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:53:28,826 - uvicorn.error - INFO - Finished server process [88709]
+2025-10-04 17:53:29,248 - watchfiles.main - INFO - 4 changes detected
+2025-10-04 17:53:29,461 - uvicorn.error - INFO - Started server process [89168]
+2025-10-04 17:53:29,461 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:53:29,461 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:53:29,461 - api.main - INFO - Running database migrations...
+2025-10-04 17:53:29,469 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:53:29,469 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:54:04,831 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:54:04,832 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py'. Reloading...
+2025-10-04 17:54:04,925 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:54:05,034 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:54:05,035 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:54:05,036 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:54:05,036 - api.main - INFO - Database connection pool closed
+2025-10-04 17:54:05,037 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:54:05,038 - uvicorn.error - INFO - Finished server process [89168]
+2025-10-04 17:54:05,413 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:54:06,173 - uvicorn.error - INFO - Started server process [91214]
+2025-10-04 17:54:06,173 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:54:06,174 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:54:06,174 - api.main - INFO - Running database migrations...
+2025-10-04 17:54:06,193 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:54:06,193 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:54:08,169 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:54:08,170 - uvicorn.error - WARNING - WatchFiles detected changes in 'routers/dashboard.py'. Reloading...
+2025-10-04 17:54:08,214 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:54:08,315 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:54:08,316 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:54:08,316 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:54:08,316 - api.main - INFO - Database connection pool closed
+2025-10-04 17:54:08,316 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:54:08,316 - uvicorn.error - INFO - Finished server process [91214]
+2025-10-04 17:54:08,683 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:54:08,954 - uvicorn.error - INFO - Started server process [91420]
+2025-10-04 17:54:08,955 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:54:08,955 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:54:08,955 - api.main - INFO - Running database migrations...
+2025-10-04 17:54:08,965 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:54:08,965 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:54:09,043 - watchfiles.main - INFO - 6 changes detected
+2025-10-04 17:54:11,944 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:54:11,945 - uvicorn.error - WARNING - WatchFiles detected changes in 'routers/dashboard.py'. Reloading...
+2025-10-04 17:54:11,990 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:54:12,092 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:54:12,093 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:54:12,093 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:54:12,093 - api.main - INFO - Database connection pool closed
+2025-10-04 17:54:12,093 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:54:12,093 - uvicorn.error - INFO - Finished server process [91420]
+2025-10-04 17:54:12,456 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:54:12,758 - uvicorn.error - INFO - Started server process [91630]
+2025-10-04 17:54:12,759 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:54:12,759 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:54:12,759 - api.main - INFO - Running database migrations...
+2025-10-04 17:54:12,769 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:54:12,769 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:54:12,809 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:55:20,827 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:55:20,828 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/migration_service.py'. Reloading...
+2025-10-04 17:55:20,832 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:55:20,936 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:55:20,939 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:55:20,939 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:55:20,940 - api.main - INFO - Database connection pool closed
+2025-10-04 17:55:20,940 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:55:20,941 - uvicorn.error - INFO - Finished server process [91630]
+2025-10-04 17:55:21,313 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:55:22,031 - uvicorn.error - INFO - Started server process [95428]
+2025-10-04 17:55:22,031 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:55:22,031 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:55:22,031 - api.main - INFO - Running database migrations...
+2025-10-04 17:55:22,047 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:55:22,047 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:55:22,093 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:55:29,179 - watchfiles.main - INFO - 5 changes detected
+2025-10-04 17:55:29,181 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/migration_service.py', 'services/ai_service.py', 'main.py', 'routers/dashboard.py', 'middleware/validation.py'. Reloading...
+2025-10-04 17:55:29,209 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:55:29,310 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:55:29,311 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:55:29,311 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:55:29,311 - api.main - INFO - Database connection pool closed
+2025-10-04 17:55:29,311 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:55:29,311 - uvicorn.error - INFO - Finished server process [95428]
+2025-10-04 17:55:29,679 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:55:30,148 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:55:30,511 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:55:30,586 - uvicorn.error - INFO - Started server process [95952]
+2025-10-04 17:55:30,587 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:55:30,588 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:55:30,589 - api.main - INFO - Running database migrations...
+2025-10-04 17:55:30,693 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:55:30,694 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:55:30,867 - watchfiles.main - INFO - 9 changes detected
+2025-10-04 17:57:45,383 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:57:45,385 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:57:45,424 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:57:45,526 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:57:45,527 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:57:45,527 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:57:45,528 - api.main - INFO - Database connection pool closed
+2025-10-04 17:57:45,528 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:57:45,528 - uvicorn.error - INFO - Finished server process [95952]
+2025-10-04 17:57:45,896 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:57:46,363 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:57:46,580 - uvicorn.error - INFO - Started server process [3894]
+2025-10-04 17:57:46,581 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:57:46,581 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:57:46,581 - api.main - INFO - Running database migrations...
+2025-10-04 17:57:46,591 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:57:46,591 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:57:50,283 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:57:50,284 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:57:50,328 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:57:50,430 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:57:50,430 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:57:50,431 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:57:50,431 - api.main - INFO - Database connection pool closed
+2025-10-04 17:57:50,431 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:57:50,431 - uvicorn.error - INFO - Finished server process [3894]
+2025-10-04 17:57:50,802 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:57:51,056 - uvicorn.error - INFO - Started server process [4163]
+2025-10-04 17:57:51,057 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:57:51,057 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:57:51,057 - api.main - INFO - Running database migrations...
+2025-10-04 17:57:51,065 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:57:51,065 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:57:51,162 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:57:56,009 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:57:56,009 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:57:56,014 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:57:56,116 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:57:56,116 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:57:56,116 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:57:56,116 - api.main - INFO - Database connection pool closed
+2025-10-04 17:57:56,116 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:57:56,116 - uvicorn.error - INFO - Finished server process [4163]
+2025-10-04 17:57:56,485 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:57:56,747 - uvicorn.error - INFO - Started server process [4491]
+2025-10-04 17:57:56,748 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:57:56,748 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:57:56,748 - api.main - INFO - Running database migrations...
+2025-10-04 17:57:56,761 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:57:56,761 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:57:56,846 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:58:08,949 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:08,949 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:58:08,978 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:58:09,079 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:58:09,079 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:58:09,079 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:58:09,079 - api.main - INFO - Database connection pool closed
+2025-10-04 17:58:09,079 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:58:09,080 - uvicorn.error - INFO - Finished server process [4491]
+2025-10-04 17:58:09,447 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:09,812 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:58:09,879 - uvicorn.error - INFO - Started server process [5239]
+2025-10-04 17:58:09,879 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:58:09,880 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:58:09,880 - api.main - INFO - Running database migrations...
+2025-10-04 17:58:09,889 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:58:09,889 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:58:14,952 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:14,953 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py'. Reloading...
+2025-10-04 17:58:15,038 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:58:15,140 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:58:15,140 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:58:15,141 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:58:15,141 - api.main - INFO - Database connection pool closed
+2025-10-04 17:58:15,141 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:58:15,142 - uvicorn.error - INFO - Finished server process [5239]
+2025-10-04 17:58:15,507 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:15,940 - uvicorn.error - INFO - Started server process [5583]
+2025-10-04 17:58:15,941 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:58:15,942 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:58:15,942 - api.main - INFO - Running database migrations...
+2025-10-04 17:58:15,951 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:58:15,951 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:58:16,028 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:58:18,107 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:18,107 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:58:18,172 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:58:18,274 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:58:18,274 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:58:18,274 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:58:18,274 - api.main - INFO - Database connection pool closed
+2025-10-04 17:58:18,274 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:58:18,274 - uvicorn.error - INFO - Finished server process [5583]
+2025-10-04 17:58:18,633 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:18,903 - uvicorn.error - INFO - Started server process [5801]
+2025-10-04 17:58:18,904 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:58:18,904 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:58:18,904 - api.main - INFO - Running database migrations...
+2025-10-04 17:58:18,912 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:58:18,912 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:58:18,994 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:58:21,842 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:21,843 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:58:21,944 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:58:22,045 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:58:22,046 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:58:22,046 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:58:22,046 - api.main - INFO - Database connection pool closed
+2025-10-04 17:58:22,047 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:58:22,047 - uvicorn.error - INFO - Finished server process [5801]
+2025-10-04 17:58:22,417 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:22,782 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:58:22,789 - uvicorn.error - INFO - Started server process [6011]
+2025-10-04 17:58:22,789 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:58:22,789 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:58:22,789 - api.main - INFO - Running database migrations...
+2025-10-04 17:58:22,798 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:58:22,798 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:58:26,722 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:26,722 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:58:26,735 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:58:26,837 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:58:26,837 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:58:26,837 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:58:26,838 - api.main - INFO - Database connection pool closed
+2025-10-04 17:58:26,838 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:58:26,838 - uvicorn.error - INFO - Finished server process [6011]
+2025-10-04 17:58:27,205 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:27,497 - uvicorn.error - INFO - Started server process [6297]
+2025-10-04 17:58:27,498 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:58:27,498 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:58:27,498 - api.main - INFO - Running database migrations...
+2025-10-04 17:58:27,505 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:58:27,505 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:58:27,567 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:58:31,969 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:31,969 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:58:32,049 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:58:32,150 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:58:32,151 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:58:32,151 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:58:32,151 - api.main - INFO - Database connection pool closed
+2025-10-04 17:58:32,151 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:58:32,151 - uvicorn.error - INFO - Finished server process [6297]
+2025-10-04 17:58:32,514 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:32,791 - uvicorn.error - INFO - Started server process [6572]
+2025-10-04 17:58:32,791 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:58:32,791 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:58:32,792 - api.main - INFO - Running database migrations...
+2025-10-04 17:58:32,801 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:58:32,801 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:58:32,872 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:58:36,862 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:36,863 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/data_service.py'. Reloading...
+2025-10-04 17:58:36,944 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:58:37,045 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:58:37,046 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:58:37,046 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:58:37,046 - api.main - INFO - Database connection pool closed
+2025-10-04 17:58:37,046 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:58:37,046 - uvicorn.error - INFO - Finished server process [6572]
+2025-10-04 17:58:37,414 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:37,671 - uvicorn.error - INFO - Started server process [6886]
+2025-10-04 17:58:37,672 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:58:37,672 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:58:37,673 - api.main - INFO - Running database migrations...
+2025-10-04 17:58:37,683 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:58:37,684 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:58:37,773 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:58:41,170 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:41,172 - uvicorn.error - WARNING - WatchFiles detected changes in 'routers/dashboard.py'. Reloading...
+2025-10-04 17:58:41,215 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:58:41,317 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:58:41,317 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:58:41,317 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:58:41,317 - api.main - INFO - Database connection pool closed
+2025-10-04 17:58:41,317 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:58:41,318 - uvicorn.error - INFO - Finished server process [6886]
+2025-10-04 17:58:41,683 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:58:41,951 - uvicorn.error - INFO - Started server process [7097]
+2025-10-04 17:58:41,952 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:58:41,952 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:58:41,952 - api.main - INFO - Running database migrations...
+2025-10-04 17:58:41,960 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:58:41,960 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:58:42,035 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:59:12,022 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 17:59:12,031 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py', 'services/data_service.py', 'routers/dashboard.py'. Reloading...
+2025-10-04 17:59:12,150 - uvicorn.error - INFO - Shutting down
+2025-10-04 17:59:12,254 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 17:59:12,255 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 17:59:12,256 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 17:59:12,256 - api.main - INFO - Database connection pool closed
+2025-10-04 17:59:12,256 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 17:59:12,256 - uvicorn.error - INFO - Finished server process [7097]
+2025-10-04 17:59:12,623 - watchfiles.main - INFO - 1 change detected
+2025-10-04 17:59:13,093 - watchfiles.main - INFO - 6 changes detected
+2025-10-04 17:59:13,330 - uvicorn.error - INFO - Started server process [8860]
+2025-10-04 17:59:13,331 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 17:59:13,331 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 17:59:13,331 - api.main - INFO - Running database migrations...
+2025-10-04 17:59:13,349 - api.main - INFO - All migrations completed successfully
+2025-10-04 17:59:13,349 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 17:59:13,457 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:05:24,018 - api.routers.dashboard - INFO - Summary metrics request completed in 0.002s for user admin@example.com
+2025-10-04 18:05:24,035 - api.services.data_service - INFO - Returning summary metrics from cache
+2025-10-04 18:05:24,035 - api.services.data_service - INFO - Returning contribution data from cache
+2025-10-04 18:05:24,035 - api.services.data_service - INFO - Returning response curves data from cache
+2025-10-04 18:05:24,038 - api.services.ai_service - INFO - Generated AI insights with confidence score: 1.00
+2025-10-04 18:05:24,038 - api.routers.dashboard - INFO - AI insights request completed in 0.003s for user admin@example.com
+2025-10-04 18:05:33,425 - uvicorn.error - INFO - Will watch for changes in these directories: ['/Users/admin/dev/tmp/software-coding-task/apps/api']
+2025-10-04 18:05:33,428 - uvicorn.error - ERROR - [Errno 48] Address already in use
+2025-10-04 18:05:33,609 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:05:49,445 - uvicorn.error - INFO - Shutting down
+2025-10-04 18:05:49,552 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 18:05:49,555 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 18:05:49,556 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 18:05:49,557 - api.main - INFO - Database connection pool closed
+2025-10-04 18:05:49,557 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 18:05:49,558 - uvicorn.error - INFO - Finished server process [8860]
+2025-10-04 18:05:49,572 - uvicorn.error - INFO - Stopping reloader process [33905]
+2025-10-04 18:06:00,875 - uvicorn.error - INFO - Will watch for changes in these directories: ['/Users/admin/dev/tmp/software-coding-task/apps/api']
+2025-10-04 18:06:00,878 - uvicorn.error - INFO - Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2025-10-04 18:06:00,880 - uvicorn.error - INFO - Started reloader process [31679] using WatchFiles
+2025-10-04 18:06:05,690 - uvicorn.error - INFO - Started server process [32061]
+2025-10-04 18:06:05,690 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 18:06:05,691 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 18:06:05,691 - api.main - INFO - Running database migrations...
+2025-10-04 18:06:05,706 - api.main - INFO - All migrations completed successfully
+2025-10-04 18:06:05,706 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 18:07:50,320 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:07:50,322 - uvicorn.error - WARNING - WatchFiles detected changes in 'middleware/validation.py'. Reloading...
+2025-10-04 18:07:50,325 - uvicorn.error - INFO - Shutting down
+2025-10-04 18:07:50,426 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 18:07:50,427 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 18:07:50,427 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 18:07:50,427 - api.main - INFO - Database connection pool closed
+2025-10-04 18:07:50,428 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 18:07:50,428 - uvicorn.error - INFO - Finished server process [32061]
+2025-10-04 18:07:50,933 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:07:55,500 - uvicorn.error - INFO - Started server process [38109]
+2025-10-04 18:07:55,500 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 18:07:55,501 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 18:07:55,501 - api.main - INFO - Running database migrations...
+2025-10-04 18:07:55,511 - api.main - INFO - All migrations completed successfully
+2025-10-04 18:07:55,512 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 18:07:55,516 - api.routers.auth - INFO - Login attempt for email: admin@example.com
+2025-10-04 18:07:55,536 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/admin/dev/tmp/software-coding-task/apps/api/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-10-04 18:07:55,599 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:07:55,783 - api.routers.auth - INFO - Successful login for email: admin@example.com
+2025-10-04 18:07:55,783 - audit - INFO - {"timestamp": "2025-10-05T01:07:55.783471", "event_type": "login_success", "user_id": null, "user_email": "admin@example.com", "resource": "authentication", "action": "login", "details": {"success": true}, "ip_address": "127.0.0.1", "user_agent": "curl/8.7.1"}
+2025-10-04 18:08:03,119 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:08:03,120 - uvicorn.error - WARNING - WatchFiles detected changes in 'middleware/validation.py'. Reloading...
+2025-10-04 18:08:03,152 - uvicorn.error - INFO - Shutting down
+2025-10-04 18:08:03,254 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 18:08:03,254 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 18:08:03,255 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 18:08:03,255 - api.main - INFO - Database connection pool closed
+2025-10-04 18:08:03,255 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 18:08:03,255 - uvicorn.error - INFO - Finished server process [38109]
+2025-10-04 18:08:03,769 - watchfiles.main - INFO - 2 changes detected
+2025-10-04 18:08:08,454 - uvicorn.error - INFO - Started server process [38870]
+2025-10-04 18:08:08,454 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 18:08:08,454 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 18:08:08,454 - api.main - INFO - Running database migrations...
+2025-10-04 18:08:08,469 - api.main - INFO - All migrations completed successfully
+2025-10-04 18:08:08,469 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 18:08:08,474 - api.routers.auth - INFO - Login attempt for email: admin@example.com
+2025-10-04 18:08:08,492 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/admin/dev/tmp/software-coding-task/apps/api/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-10-04 18:08:08,513 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:08:08,733 - api.routers.auth - INFO - Successful login for email: admin@example.com
+2025-10-04 18:08:08,733 - audit - INFO - {"timestamp": "2025-10-05T01:08:08.733186", "event_type": "login_success", "user_id": null, "user_email": "admin@example.com", "resource": "authentication", "action": "login", "details": {"success": true}, "ip_address": "127.0.0.1", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+2025-10-04 18:08:08,764 - api.routers.dashboard - INFO - Summary metrics request completed in 0.000s for user admin@example.com
+2025-10-04 18:08:08,776 - api.services.data_service - INFO - Returning summary metrics from cache
+2025-10-04 18:08:08,776 - api.services.data_service - INFO - Returning contribution data from cache
+2025-10-04 18:08:08,776 - api.services.data_service - INFO - Returning response curves data from cache
+2025-10-04 18:08:08,777 - api.services.ai_service - INFO - Generated AI insights with confidence score: 1.00
+2025-10-04 18:08:08,777 - api.routers.dashboard - INFO - AI insights request completed in 0.001s for user admin@example.com
+2025-10-04 18:09:30,235 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:09:30,237 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/mock_ai_service.py'. Reloading...
+2025-10-04 18:09:30,316 - uvicorn.error - INFO - Shutting down
+2025-10-04 18:09:30,419 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 18:09:30,421 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 18:09:30,423 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 18:09:30,423 - api.main - INFO - Database connection pool closed
+2025-10-04 18:09:30,423 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 18:09:30,423 - uvicorn.error - INFO - Finished server process [38870]
+2025-10-04 18:09:30,940 - watchfiles.main - INFO - 2 changes detected
+2025-10-04 18:09:32,909 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:09:32,910 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py'. Reloading...
+2025-10-04 18:09:37,788 - uvicorn.error - INFO - Started server process [43847]
+2025-10-04 18:09:37,788 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 18:09:37,789 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 18:09:37,789 - api.main - INFO - Running database migrations...
+2025-10-04 18:09:37,800 - api.main - INFO - All migrations completed successfully
+2025-10-04 18:09:37,800 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 18:09:37,863 - watchfiles.main - INFO - 6 changes detected
+2025-10-04 18:09:42,485 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:09:42,486 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py'. Reloading...
+2025-10-04 18:09:42,547 - uvicorn.error - INFO - Shutting down
+2025-10-04 18:09:42,648 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 18:09:42,649 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 18:09:42,649 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 18:09:42,649 - api.main - INFO - Database connection pool closed
+2025-10-04 18:09:42,649 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 18:09:42,650 - uvicorn.error - INFO - Finished server process [43847]
+2025-10-04 18:09:43,130 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:09:47,806 - uvicorn.error - INFO - Started server process [44414]
+2025-10-04 18:09:47,807 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 18:09:47,807 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 18:09:47,807 - api.main - INFO - Running database migrations...
+2025-10-04 18:09:47,818 - api.main - INFO - All migrations completed successfully
+2025-10-04 18:09:47,818 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 18:09:47,894 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:09:48,314 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:09:48,314 - uvicorn.error - WARNING - WatchFiles detected changes in 'config.py'. Reloading...
+2025-10-04 18:09:48,324 - uvicorn.error - INFO - Shutting down
+2025-10-04 18:09:48,425 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 18:09:48,426 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 18:09:48,426 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 18:09:48,426 - api.main - INFO - Database connection pool closed
+2025-10-04 18:09:48,426 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 18:09:48,426 - uvicorn.error - INFO - Finished server process [44414]
+2025-10-04 18:09:48,889 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:09:52,543 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:09:52,545 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py'. Reloading...
+2025-10-04 18:09:55,920 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:09:55,920 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py'. Reloading...
+2025-10-04 18:10:00,464 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:10:00,773 - uvicorn.error - INFO - Started server process [45181]
+2025-10-04 18:10:00,774 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 18:10:00,774 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 18:10:00,774 - api.main - INFO - Running database migrations...
+2025-10-04 18:10:00,787 - api.main - INFO - All migrations completed successfully
+2025-10-04 18:10:00,787 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 18:10:00,879 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:10:04,081 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:10:04,084 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py'. Reloading...
+2025-10-04 18:10:04,122 - uvicorn.error - INFO - Shutting down
+2025-10-04 18:10:04,224 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 18:10:04,224 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 18:10:04,225 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 18:10:04,225 - api.main - INFO - Database connection pool closed
+2025-10-04 18:10:04,225 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 18:10:04,225 - uvicorn.error - INFO - Finished server process [45181]
+2025-10-04 18:10:04,691 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:10:09,078 - uvicorn.error - INFO - Started server process [45682]
+2025-10-04 18:10:09,078 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 18:10:09,078 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 18:10:09,078 - api.main - INFO - Running database migrations...
+2025-10-04 18:10:09,088 - api.main - INFO - All migrations completed successfully
+2025-10-04 18:10:09,088 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 18:10:09,170 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:10:26,317 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:10:26,325 - uvicorn.error - WARNING - WatchFiles detected changes in 'services/ai_service.py', 'config.py', 'services/mock_ai_service.py'. Reloading...
+2025-10-04 18:10:26,352 - uvicorn.error - INFO - Shutting down
+2025-10-04 18:10:26,460 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 18:10:26,462 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 18:10:26,464 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 18:10:26,464 - api.main - INFO - Database connection pool closed
+2025-10-04 18:10:26,466 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 18:10:26,470 - uvicorn.error - INFO - Finished server process [45682]
+2025-10-04 18:10:27,410 - watchfiles.main - INFO - 1 change detected
+2025-10-04 18:10:31,680 - watchfiles.main - INFO - 3 changes detected
+2025-10-04 18:10:31,993 - uvicorn.error - INFO - Started server process [46989]
+2025-10-04 18:10:31,994 - uvicorn.error - INFO - Waiting for application startup.
+2025-10-04 18:10:31,994 - api.main - INFO - Starting up MMM Dashboard API...
+2025-10-04 18:10:31,994 - api.main - INFO - Running database migrations...
+2025-10-04 18:10:32,008 - api.main - INFO - All migrations completed successfully
+2025-10-04 18:10:32,009 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 18:10:32,094 - watchfiles.main - INFO - 6 changes detected

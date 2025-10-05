@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     REDIS_PORT: int = Field(default=6379, description="Redis port")
     REDIS_DB: int = Field(default=0, description="Redis database number")
     
+    # AI Configuration
+    USE_MOCK_AI: bool = Field(default=True, description="Use mock AI service for development")
+    
     @validator('SECRET_KEY')
     def validate_secret_key(cls, v):
         if v == "your-secret-key-here":

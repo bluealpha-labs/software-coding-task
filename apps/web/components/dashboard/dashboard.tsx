@@ -11,7 +11,11 @@ import {
 import { Button } from "@workspace/ui/components/button";
 import { ContributionChart } from "../charts/contribution-chart";
 import { ResponseCurvesChart } from "../charts/response-curves-chart";
+import { AIInsightsPanel } from "../ai/ai-insights-panel";
+import { DataSourceIndicator } from "../data-source-indicator";
+import { AdminOnly } from "../rbac/role-guard";
 import { useAuth } from "../../lib/auth";
+import { useDashboardData } from "../../hooks/useDashboardData";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -37,52 +41,17 @@ interface ResponseCurvesData {
 
 export function Dashboard() {
   const { user, logout } = useAuth();
-  const [summary, setSummary] = useState<SummaryMetrics | null>(null);
-  const [contributionData, setContributionData] =
-    useState<ContributionData | null>(null);
-  const [responseCurvesData, setResponseCurvesData] =
-    useState<ResponseCurvesData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    summaryMetrics,
+    contributionData,
+    responseCurves,
+    aiInsights,
+    isLoading,
+    isError,
+    error,
+  } = useDashboardData();
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
-    try {
-      // Use consistent token retrieval from cookies
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-
-      if (!token) {
-        console.error("No authentication token found");
-        setLoading(false);
-        return;
-      }
-
-      console.log("Fetching dashboard data with token:", token.substring(0, 20) + "...");
-      const headers = { Authorization: `Bearer ${token}` };
-
-      const [summaryRes, contributionRes, responseRes] = await Promise.all([
-        axios.get(`${API_URL}/api/summary-metrics`, { headers }),
-        axios.get(`${API_URL}/api/contribution-data`, { headers }),
-        axios.get(`${API_URL}/api/response-curves`, { headers }),
-      ]);
-
-      setSummary(summaryRes.data);
-      setContributionData(contributionRes.data);
-      setResponseCurvesData(responseRes.data);
-    } catch (error) {
-      console.error("Failed to fetch dashboard data:", error);
-      // Don't set loading to false on error, let user retry
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
@@ -108,9 +77,12 @@ export function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                MMM Dashboard
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-3xl font-bold text-gray-900">
+                  MMM Dashboard
+                </h1>
+                <DataSourceIndicator />
+              </div>
               <p className="text-gray-600">
                 Welcome back, {user?.full_name || user?.email}
               </p>
@@ -125,7 +97,7 @@ export function Dashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Summary Cards */}
-        {summary && (
+        {summaryMetrics.data && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -135,7 +107,7 @@ export function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  ${summary.total_spend.toLocaleString()}
+                  ${summaryMetrics.data.total_spend.toLocaleString()}
                 </div>
               </CardContent>
             </Card>
@@ -148,7 +120,7 @@ export function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  ${summary.total_contribution.toLocaleString()}
+                  ${summaryMetrics.data.total_contribution.toLocaleString()}
                 </div>
               </CardContent>
             </Card>
@@ -159,7 +131,7 @@ export function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {summary.roi.toFixed(1)}%
+                  {summaryMetrics.data.roi.toFixed(1)}%
                 </div>
               </CardContent>
             </Card>
@@ -171,17 +143,26 @@ export function Dashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{summary.top_channel}</div>
+                <div className="text-2xl font-bold">
+                  {summaryMetrics.data.top_channel}
+                </div>
               </CardContent>
             </Card>
           </div>
         )}
 
+        {/* AI Insights Panel */}
+        <div className="mb-8">
+          <AIInsightsPanel />
+        </div>
+
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {contributionData && <ContributionChart data={contributionData} />}
-          {responseCurvesData && (
-            <ResponseCurvesChart data={responseCurvesData} />
+          {contributionData.data && (
+            <ContributionChart data={contributionData.data} />
+          )}
+          {responseCurves.data && (
+            <ResponseCurvesChart data={responseCurves.data} />
           )}
         </div>
       </main>

@@ -40,6 +40,7 @@ class DataService:
             with open(pkl_path, 'rb') as f:
                 self.model = pickle.load(f)
             logger.info(f"Successfully loaded model from {pkl_path}")
+            logger.info("Model data will be used instead of mock data")
             
         except Exception as e:
             logger.error(f"Error loading model: {e}")
@@ -105,6 +106,19 @@ class DataService:
             logger.info("Returning summary metrics from cache")
             return SummaryMetrics(**cached_data)
         
+        # Use model data if available, otherwise fall back to mock data
+        if self.model is not None:
+            try:
+                logger.info("Using data from loaded .pkl model")
+                metrics = self._get_metrics_from_model()
+                if metrics:
+                    # Cache the result for 1 hour
+                    cache_service.set(cache_key, metrics.dict(), ttl=3600)
+                    return metrics
+            except Exception as e:
+                logger.warning(f"Error getting metrics from model: {e}")
+                logger.info("Falling back to mock data")
+        
         if self.mock_data:
             total_spend = sum(self.mock_data['spend'])
             total_contribution = sum(self.mock_data['contribution'])
@@ -141,6 +155,19 @@ class DataService:
             logger.info("Returning contribution data from cache")
             return ContributionData(**cached_data)
         
+        # Use model data if available, otherwise fall back to mock data
+        if self.model is not None:
+            try:
+                logger.info("Using contribution data from loaded .pkl model")
+                data = self._get_contribution_from_model()
+                if data:
+                    # Cache the result for 1 hour
+                    cache_service.set(cache_key, data.dict(), ttl=3600)
+                    return data
+            except Exception as e:
+                logger.warning(f"Error getting contribution data from model: {e}")
+                logger.info("Falling back to mock data")
+        
         if self.mock_data:
             data = ContributionData(
                 channels=self.mock_data['channels'],
@@ -164,6 +191,19 @@ class DataService:
             logger.info("Returning response curves data from cache")
             return ResponseCurvesData(**cached_data)
         
+        # Use model data if available, otherwise fall back to mock data
+        if self.model is not None:
+            try:
+                logger.info("Using response curves from loaded .pkl model")
+                data = self._get_response_curves_from_model()
+                if data:
+                    # Cache the result for 1 hour
+                    cache_service.set(cache_key, data.dict(), ttl=3600)
+                    return data
+            except Exception as e:
+                logger.warning(f"Error getting response curves from model: {e}")
+                logger.info("Falling back to mock data")
+        
         if self.mock_data:
             data = ResponseCurvesData(
                 channels=list(self.mock_data['response_curves'].keys()),
@@ -175,6 +215,182 @@ class DataService:
             return data
         
         return ResponseCurvesData(channels=[], curves={})
+    
+    def _get_metrics_from_model(self) -> SummaryMetrics:
+        """Extract summary metrics from the loaded model"""
+        try:
+            # Extract data from the model
+            if hasattr(self.model, 'data') and self.model.data is not None:
+                data = self.model.data
+            elif hasattr(self.model, 'X') and self.model.X is not None:
+                data = self.model.X
+            else:
+                logger.warning("Model doesn't have accessible data attributes")
+                return None
+            
+            # Get channel information
+            if hasattr(self.model, 'channels') and self.model.channels is not None:
+                channels = self.model.channels
+            elif hasattr(data, 'columns'):
+                channels = data.columns.tolist()
+            else:
+                logger.warning("Could not extract channels from model")
+                return None
+            
+            # Calculate spend and contribution
+            if hasattr(self.model, 'spend') and self.model.spend is not None:
+                spend = self.model.spend
+            else:
+                # Try to extract spend from data
+                spend = data.sum().values if hasattr(data, 'sum') else [0] * len(channels)
+            
+            if hasattr(self.model, 'contribution') and self.model.contribution is not None:
+                contribution = self.model.contribution
+            else:
+                # Estimate contribution from spend (simplified)
+                contribution = [s * 0.8 for s in spend]  # Assume 80% efficiency
+            
+            total_spend = sum(spend)
+            total_contribution = sum(contribution)
+            roi = (total_contribution - total_spend) / total_spend * 100 if total_spend > 0 else 0
+            
+            # Find top channel
+            top_channel_idx = np.argmax(contribution) if contribution else 0
+            top_channel = channels[top_channel_idx] if top_channel_idx < len(channels) else "N/A"
+            
+            return SummaryMetrics(
+                total_spend=total_spend,
+                total_contribution=total_contribution,
+                roi=roi,
+                top_channel=top_channel,
+                total_channels=len(channels)
+            )
+            
+        except Exception as e:
+            logger.error(f"Error extracting metrics from model: {e}")
+            return None
+    
+    def _get_contribution_from_model(self) -> ContributionData:
+        """Extract contribution data from the loaded model"""
+        try:
+            # Extract data from the model
+            if hasattr(self.model, 'data') and self.model.data is not None:
+                data = self.model.data
+            elif hasattr(self.model, 'X') and self.model.X is not None:
+                data = self.model.X
+            else:
+                logger.warning("Model doesn't have accessible data attributes")
+                return None
+            
+            # Get channel information
+            if hasattr(self.model, 'channels') and self.model.channels is not None:
+                channels = self.model.channels
+            elif hasattr(data, 'columns'):
+                channels = data.columns.tolist()
+            else:
+                logger.warning("Could not extract channels from model")
+                return None
+            
+            # Calculate spend and contribution
+            if hasattr(self.model, 'spend') and self.model.spend is not None:
+                spend = self.model.spend.tolist() if hasattr(self.model.spend, 'tolist') else list(self.model.spend)
+            else:
+                spend = data.sum().values.tolist() if hasattr(data, 'sum') else [0] * len(channels)
+            
+            if hasattr(self.model, 'contribution') and self.model.contribution is not None:
+                contribution = self.model.contribution.tolist() if hasattr(self.model.contribution, 'tolist') else list(self.model.contribution)
+            else:
+                # Estimate contribution from spend
+                contribution = [s * 0.8 for s in spend]
+            
+            return ContributionData(
+                channels=channels,
+                spend=spend,
+                contribution=contribution
+            )
+            
+        except Exception as e:
+            logger.error(f"Error extracting contribution data from model: {e}")
+            return None
+    
+    def _get_response_curves_from_model(self) -> ResponseCurvesData:
+        """Extract response curves data from the loaded model"""
+        try:
+            # Get channel information
+            if hasattr(self.model, 'channels') and self.model.channels is not None:
+                channels = self.model.channels
+            else:
+                logger.warning("Could not extract channels from model")
+                return None
+            
+            curves = {}
+            
+            # Try to extract response curves from model
+            if hasattr(self.model, 'response_curves') and self.model.response_curves is not None:
+                curves = self.model.response_curves
+            elif hasattr(self.model, 'curves') and self.model.curves is not None:
+                curves = self.model.curves
+            else:
+                # Generate response curves from model predictions if available
+                curves = self._generate_response_curves_from_model(channels)
+            
+            return ResponseCurvesData(
+                channels=channels,
+                curves=curves
+            )
+            
+        except Exception as e:
+            logger.error(f"Error extracting response curves from model: {e}")
+            return None
+    
+    def _generate_response_curves_from_model(self, channels: List[str]) -> Dict[str, List[Dict]]:
+        """Generate response curves from model predictions"""
+        curves = {}
+        
+        for channel in channels:
+            # Generate spend points
+            spend_points = np.linspace(0, 100000, 20)
+            response_points = []
+            
+            for spend in spend_points:
+                # Use model to predict response if possible
+                try:
+                    if hasattr(self.model, 'predict') and callable(self.model.predict):
+                        # Create input for prediction
+                        input_data = np.zeros((1, len(channels)))
+                        channel_idx = channels.index(channel)
+                        input_data[0, channel_idx] = spend
+                        
+                        # Get prediction
+                        response = self.model.predict(input_data)[0]
+                    else:
+                        # Fallback to simple estimation
+                        response = spend * 0.8 - 0.000001 * spend**2
+                except:
+                    # Fallback to simple estimation
+                    response = spend * 0.8 - 0.000001 * spend**2
+                
+                response_points.append({
+                    'spend': float(spend),
+                    'response': max(0, float(response))
+                })
+            
+            curves[channel] = response_points
+        
+        return curves
+    
+    def is_using_model_data(self) -> bool:
+        """Check if the service is using model data from .pkl file"""
+        return self.model is not None
+    
+    def get_data_source_info(self) -> Dict[str, Any]:
+        """Get information about the current data source"""
+        return {
+            "using_model": self.model is not None,
+            "using_mock_data": self.mock_data is not None,
+            "model_loaded": self.model is not None,
+            "data_source": "model" if self.model is not None else "mock"
+        }
 
 # Global instance
 data_service = DataService()

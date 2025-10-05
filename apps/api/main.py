@@ -9,6 +9,7 @@ from api.routers import auth, dashboard
 from api.logging_config import setup_logging, get_logger
 from api.constants import API_TITLE, API_VERSION, ALLOWED_ORIGINS
 from api.services.migration_service import migration_service
+from api.middleware.validation import enhanced_validation_handler
 import logging
 import time
 
@@ -42,6 +43,11 @@ async def global_exception_handler(request, exc):
         status_code=500,
         content={"detail": "Internal server error"}
     )
+
+# Enhanced validation middleware
+@app.middleware("http")
+async def validation_middleware(request: Request, call_next):
+    return await enhanced_validation_handler(request, call_next)
 
 # Security headers middleware
 @app.middleware("http")

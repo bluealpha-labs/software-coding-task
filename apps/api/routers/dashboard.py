@@ -5,6 +5,7 @@ from api.models.dashboard import SummaryMetrics, ContributionData, ResponseCurve
 from api.models.user import User
 from api.routers.auth import get_current_user
 from api.services.data_service import data_service
+from api.services.ai_service import ai_service
 from api.services.cache_service import cache_service, cache_key
 from api.constants import CACHE_TTL_DEFAULT
 from api.logging_config import get_logger
@@ -54,6 +55,28 @@ async def get_response_curves_data(request: Request, current_user: User = Depend
         data_service.get_response_curves_data,
         ttl=CACHE_TTL_DEFAULT
     )
+
+@router.get("/ai-insights", summary="Get AI insights", description="Get AI-powered insights and recommendations for marketing data")
+@limiter.limit("20/minute")
+async def get_ai_insights(request: Request, current_user: User = Depends(get_current_user)):
+    start_time = time.time()
+    cache_key_str = cache_key("ai", "insights", user_id=current_user.id)
+    result = await cache_service.cached_call(
+        cache_key_str,
+        ai_service.get_ai_insights,
+        ttl=CACHE_TTL_DEFAULT
+    )
+    
+    # Log performance metrics
+    duration = time.time() - start_time
+    logger.info(f"AI insights request completed in {duration:.3f}s for user {current_user.email}")
+    
+    return result
+
+@router.get("/data-source", summary="Get data source info", description="Get information about whether model or mock data is being used")
+@limiter.limit("10/minute")
+async def get_data_source_info(request: Request, current_user: User = Depends(get_current_user)):
+    return data_service.get_data_source_info()
 
 @router.get("/cache-stats", summary="Get cache statistics", description="Get cache performance statistics")
 @limiter.limit("10/minute")

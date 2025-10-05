@@ -5,11 +5,17 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toastService } from "./toast";
 
+export enum UserRole {
+  USER = "user",
+  ADMIN = "admin",
+}
+
 interface User {
   id: number;
   email: string;
   full_name: string | null;
   is_active: boolean;
+  role: UserRole;
   created_at: string;
 }
 
@@ -84,9 +90,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       setUser(userResponse.data);
       toastService.success("Login successful!");
-      
+
       // Small delay to ensure cookie is set before redirect
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     } catch (error: any) {
       console.error("Login failed:", error);
 
