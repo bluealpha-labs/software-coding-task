@@ -11,11 +11,11 @@ def run_migration():
     try:
         # Database connection parameters
         conn_params = {
-            'host': 'localhost',
-            'port': 5432,
-            'database': 'local',
-            'user': 'postgres',
-            'password': 'password'
+            'host': os.getenv('POSTGRES_HOST', 'localhost'),
+            'port': int(os.getenv('POSTGRES_PORT', 5432)),
+            'database': os.getenv('POSTGRES_DB', 'local'),
+            'user': os.getenv('POSTGRES_USER', 'postgres'),
+            'password': os.getenv('POSTGRES_PASSWORD', 'password')
         }
         
         print("🔌 Connecting to PostgreSQL database...")

@@ -6778,3 +6778,13 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 20:40:19,417 - api.main - INFO - Successfully loaded Meridian model from /Users/admin/dev/tmp/software-coding-task/apps/api/saved_mmm.pkl
 2025-10-04 20:40:19,417 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
 2025-10-04 20:40:19,417 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 20:46:21,768 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:46:21,771 - uvicorn.error - WARNING - WatchFiles detected changes in 'run_migration.py'. Reloading...
+2025-10-04 20:46:21,834 - uvicorn.error - INFO - Shutting down
+2025-10-04 20:46:21,970 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 20:46:21,973 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 20:46:21,973 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 20:46:21,973 - api.main - INFO - Database connection pool closed
+2025-10-04 20:46:21,974 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 20:46:21,976 - uvicorn.error - INFO - Finished server process [45470]
+2025-10-04 20:46:22,602 - watchfiles.main - INFO - 1 change detected
