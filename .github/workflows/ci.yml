@@ -66,6 +66,18 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-pnpm-store-
 
+            - name: Cache node_modules
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      node_modules
+                      apps/web/node_modules
+                      apps/api/node_modules
+                      packages/*/node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
             - name: Install uv
               run: |
                   curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -73,6 +85,16 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install --no-frozen-lockfile
+
+            - name: Cache Python dependencies
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      apps/api/.venv
+                      ~/.cache/uv
+                  key: ${{ runner.os }}-python-deps-${{ hashFiles('apps/api/pyproject.toml', 'apps/api/uv.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-python-deps-
 
             - name: Install Python dependencies
               run: |
@@ -104,10 +126,25 @@ jobs:
                   REDIS_PORT: 6379
               continue-on-error: true
 
+            - name: Cache Playwright browsers
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      ~/.cache/ms-playwright
+                      apps/web/node_modules/@playwright/test
+                  key: ${{ runner.os }}-playwright-${{ hashFiles('apps/web/package.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-playwright-
+
             - name: Install Playwright browsers
               run: |
                   cd apps/web
-                  pnpm exec playwright install --with-deps
+                  # Only install if browsers are not cached
+                  if [ ! -d ~/.cache/ms-playwright ]; then
+                      pnpm exec playwright install --with-deps
+                  else
+                      echo "Playwright browsers already cached, skipping installation"
+                  fi
 
             - name: Run frontend tests
               run: |
