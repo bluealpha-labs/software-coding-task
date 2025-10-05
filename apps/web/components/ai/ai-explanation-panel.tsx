@@ -17,7 +17,7 @@ import {
   mmmApi,
   getCachedExplanation,
   setCachedExplanation,
-} from "@/lib/mmm-api";
+} from "../../lib/mmm-api";
 import { toast } from "react-hot-toast";
 
 interface AIExplanationPanelProps {
