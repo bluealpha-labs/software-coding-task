@@ -77,7 +77,7 @@ jobs:
             - name: Install Python dependencies
               run: |
                   cd apps/api
-                  uv sync
+                  uv sync --extra test
 
             - name: Run database migrations
               run: |
