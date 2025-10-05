@@ -29,7 +29,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 COPY --from=pruner /app/out/json/ .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     --mount=type=cache,id=pnpm-metadata,target=/pnpm/metadata-cache \
-    pnpm install -r --frozen-lockfile --offline
+    pnpm install -r --offline
 
 # Stage 4: Builder
 FROM installer AS builder

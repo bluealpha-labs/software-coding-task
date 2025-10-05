@@ -15,7 +15,7 @@
     "test:debug": "playwright test --debug",
     "test:headed": "playwright test --headed",
     "test:report": "playwright show-report",
-    "install": "pnpm install --ignore-scripts --frozen-lockfile"
+    "install": "pnpm install --ignore-scripts"
   },
   "dependencies": {
     "@workspace/ui": "workspace:*",

@@ -111,7 +111,8 @@ export function Sidebar({
               key={item.id}
               variant={isActive ? "default" : "ghost"}
               className={cn(
-                "w-full justify-start h-auto p-3",
+                "w-full justify-start h-auto p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100",
+                isActive && "bg-blue-600 text-white hover:bg-blue-700 hover:text-white",
                 isCollapsed && "justify-center p-2"
               )}
               onClick={() => onSectionChange(item.id)}

@@ -6683,3 +6683,4 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 20:12:14,855 - api.main - INFO - Successfully loaded Meridian model from /Users/admin/dev/tmp/software-coding-task/apps/api/saved_mmm.pkl
 2025-10-04 20:12:14,855 - api.main - INFO - Model has 6 channels: ['TV', 'Digital', 'Radio', 'Print', 'Outdoor', 'Social Media']
 2025-10-04 20:12:14,855 - uvicorn.error - INFO - Application startup complete.
+2025-10-04 20:13:09,967 - api.routers.mmm_dev - INFO - Response curve request for Digital completed in 0.000s for dev user
