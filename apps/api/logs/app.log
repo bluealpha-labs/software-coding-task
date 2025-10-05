@@ -6732,3 +6732,13 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-10-04 20:19:02,743 - api.routers.mmm_dev - INFO - Returning contributions from cache
 2025-10-04 20:19:02,744 - api.routers.mmm_dev - INFO - Returning contributions from cache
 2025-10-04 20:19:02,765 - api.routers.mmm_dev - INFO - Returning response curve for TV from cache
+2025-10-04 20:39:55,421 - watchfiles.main - INFO - 1 change detected
+2025-10-04 20:39:55,437 - uvicorn.error - WARNING - WatchFiles detected changes in 'tests/test_rbac.py'. Reloading...
+2025-10-04 20:39:55,449 - uvicorn.error - INFO - Shutting down
+2025-10-04 20:39:55,562 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-10-04 20:39:55,563 - api.main - INFO - Shutting down MMM Dashboard API...
+2025-10-04 20:39:55,567 - api.services.database_service - INFO - Database connection pool closed
+2025-10-04 20:39:55,568 - api.main - INFO - Database connection pool closed
+2025-10-04 20:39:55,568 - uvicorn.error - INFO - Application shutdown complete.
+2025-10-04 20:39:55,571 - uvicorn.error - INFO - Finished server process [72955]
+2025-10-04 20:39:56,161 - watchfiles.main - INFO - 1 change detected

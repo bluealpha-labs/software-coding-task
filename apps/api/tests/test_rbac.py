@@ -1,7 +1,7 @@
 import pytest
 from fastapi import HTTPException
 from api.models.user import User, UserRole
-from api.services.rbac_service import RBACService, require_role, get_user_role
+from api.services.rbac_service import RBACService, require_role
 
 class TestRBACService:
     """Test RBAC (Role-Based Access Control) functionality."""
